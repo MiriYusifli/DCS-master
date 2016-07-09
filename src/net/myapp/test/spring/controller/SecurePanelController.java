@@ -31,7 +31,6 @@ import net.myapp.hbr.dao.UserDAOImpl;
 import net.myapp.helper.CommonUtil;
 import net.myapp.helper.SecureUserUtil;
 import net.myapp.helper.secure.Utils;
-
 @Controller
 
 public class SecurePanelController {
@@ -45,7 +44,7 @@ public class SecurePanelController {
 	@Autowired(required = true)
 	@Qualifier(value = "userDAO")
 	private UserDAOImpl userDAOImpl;
-
+	asdadasdadsasda
 	//// normal page passing to default/jsp folder page inside of main.jsp
 	@RequestMapping(value = "panel/login", method = RequestMethod.GET)
 	public String printHello(@RequestParam(defaultValue = "null") String login,
