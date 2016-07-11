@@ -1,4 +1,4 @@
-package net.myapp.model.form;
+package net.myapp.form.model;
 
 public class MainRequest {
 String ok="null";

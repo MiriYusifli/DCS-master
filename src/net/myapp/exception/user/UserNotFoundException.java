@@ -2,13 +2,14 @@ package net.myapp.exception.user;
 
 
 import net.myapp.exception.MyException;
-import net.myapp.exception.NotFoundException;
 
-public class UserNotFoundException extends NotFoundException{
+
+public class UserNotFoundException extends MyException{
 
 	
 public UserNotFoundException(String login) {
-	this.setErrorDescription("user "+this.getErrorDescription()+login);
+	this.setErrorDescription("user not found: "+login);
+	this.setI18nErrorMessageKey("NOT_FOUND");
     this.setI18nErrorMessageArg(login);	
 }
 @Override

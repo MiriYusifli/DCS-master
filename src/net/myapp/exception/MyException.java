@@ -14,7 +14,7 @@ public class MyException extends Exception {
 		return errorDescription;
 	}
 	public void setErrorDescription(String errorDescription) {
-		this.errorDescription = " "+errorDescription+" :";
+		this.errorDescription =errorDescription;
 	}
 	public String getI18nErrorMessageKey() {
 		return i18nErrorMessageKey;

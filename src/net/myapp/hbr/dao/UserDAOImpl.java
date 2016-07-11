@@ -1,20 +1,18 @@
 package net.myapp.hbr.dao;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
-import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import net.myapp.dao.model.Order;
 import net.myapp.dao.model.User;
 import net.myapp.dao.model.UserCard;
+import net.myapp.exception.user.UserNotFoundException;
 import net.myapp.helper.CommonUtil;
+import net.myapp.helper.dao.DataUtilStrParameter;
 
 @Repository
 public class UserDAOImpl {
@@ -59,8 +57,10 @@ public class UserDAOImpl {
     
     
     @Transactional
-    public List<Object[]> getTest(UserCard card) {
+    public List<Object[]> getTest(UserCard card) throws UserNotFoundException {
         Session session = this.sessionFactory.getCurrentSession(); 
+        
+        DataUtilStrParameter.clean();//for re initialized parameters list
         String hql="select u,uc,o,od,g,c,ct from UserCard uc "
 				                         +" INNER JOIN uc.orderSet as o"
 				                         +" INNER JOIN o.orderDetailSet as od"
@@ -69,27 +69,30 @@ public class UserDAOImpl {
 				                         +" INNER JOIN c.cardType as ct"
 				                         +" INNER JOIN uc.user  as u"
 				                         +" Where 1=1 ";
-        if(CommonUtil.isNullOrEmpty(card.getUser().getEmail())==false)
-        {
-        	hql=hql+" AND  u.email='"+card.getUser().getEmail()+"'";
+        if(!CommonUtil.isNullOrEmpty(card.getUser().getEmail())) {
+        	hql+=" AND  u.email=?";
+        	DataUtilStrParameter.add(card.getUser().getEmail());
         }
-        if(CommonUtil.isNullOrEmpty(card.getUser().getPin())==false)
-        {
-        	hql=hql+" AND  u.pin='"+card.getUser().getPin()+"'";
+        if(!CommonUtil.isNullOrEmpty(card.getUser().getPin())) {
+        	hql+=" AND  u.pin=?";
+        	DataUtilStrParameter.add(card.getUser().getPin());
         }
-        if(CommonUtil.isNullOrEmpty(card.getCard().getCode())==false)
-        {
-        	hql=hql+" AND  c.code='"+card.getCard().getCode()+"'";
+        if(!CommonUtil.isNullOrEmpty(card.getCard().getCode())) {
+        	hql+=" AND  c.code=?";
+        	DataUtilStrParameter.add(card.getCard().getCode());
         }
-        if(CommonUtil.isNull(card.getId())==false && card.getId()!=0)
-        {
-        	hql=hql+" AND  uc.id='"+card.getId()+"'";
+        if(!CommonUtil.isNull(card.getId()) && card.getId()!=0) {
+        	hql=hql+" AND  uc.id=?";
+        	DataUtilStrParameter.add(card.getId());
         }
         System.out.println("hql is "+hql);
         Query query = session.createQuery(hql);
+        DataUtilStrParameter.setParameter(query);
        // query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
         //List list = query.list();
         List<Object[]> list = query.list();
+        
+        if (CommonUtil.isEmpty(list))  throw new UserNotFoundException("---");
 		/*for(Object[] arr : list){
 			UserCard userCard=(UserCard) arr[0];
 	     	Order order=(Order) arr[1];

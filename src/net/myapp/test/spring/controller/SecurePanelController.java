@@ -27,6 +27,7 @@ import net.myapp.dao.model.SecureUserEnum;
 import net.myapp.dao.model.User;
 import net.myapp.dao.model.UserCard;
 import net.myapp.exception.user.UserNotFoundException;
+import net.myapp.form.model.CardSearchRequest;
 import net.myapp.hbr.dao.UserDAOImpl;
 import net.myapp.helper.CommonUtil;
 import net.myapp.helper.SecureUserUtil;
@@ -101,8 +102,15 @@ public class SecurePanelController {
 			
 			RequestHelper.setAttribute("UserCard",userCard);
 			
-			List<Object[]> list=userDAOImpl.getTest(userCard);
-			RequestHelper.setAttribute("Report",list);
+			List<Object[]> list;
+			try {
+				list = userDAOImpl.getTest(userCard);
+				RequestHelper.setAttribute("Report",list);
+				
+			} catch (UserNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			/*System.out.println("*()");
 				for (Object[] objects : list) {
 				System.out.println(objects[0].toString());
@@ -130,44 +138,42 @@ for (UserCard userCard : user.getUserCardSet()) {
 	}
 	
 	
-	@RequestMapping(value = "test2", method = RequestMethod.GET)
-	public String printHello6(@RequestParam(defaultValue = "null") String user_pin,
-			@RequestParam(defaultValue = "null") String user_card_code) {
+	@RequestMapping(value = "card/search", method = RequestMethod.GET)
+	public String index_CardSearch(CardSearchRequest input) {
 	UserCard userCard=new UserCard();
 	User user=new User();
 	Card card=new Card();
-	if(CommonUtil.isNullOrEmpty(user_pin)==false){
-		 
-		RequestHelper.setAttribute("pin_email",user_pin);
+	if(input.isNotNullSubmitOk()) {
+	  if(CommonUtil.isEmail(input.getPin_email())) 	user.setEmail(input.getPin_email());
+	  else                                          user.setPin(input.getPin_email());
+	card.setCode(input.getCode());
 
-		
-	if(CommonUtil.isEmail(user_pin)==true)
-		{
-			user.setEmail(user_pin);
-		}
-	else
-		{
-			user.setPin(user_pin);
-		}
-												  }
-	if(CommonUtil.isNullOrEmpty(user_card_code)==false)
-		RequestHelper.setAttribute("user_card_code",user_card_code);
-
-		{	
-			card.setCode(user_card_code);
-		}
+	
 	userCard.setUser(user);
 	userCard.setCard(card);
-	List<Object[]>result_list=userDAOImpl.getTest(userCard);
-	if(result_list.size()!=0){
-	User result_user=(User) result_list.get(0)[0];
-	RequestHelper.setAttribute("user_id",result_user.getId());
-	RequestHelper.setAttribute("user_name",result_user.getName());
-	System.out.println("User is "+result_user.getName());
+	
+	try {
+		List<Object[]> usercardList = userDAOImpl.getTest(userCard);
+		User result_user=(User) usercardList.get(0)[0];
+		RequestHelper.setAttribute("user_id",result_user.getId());
+		RequestHelper.setAttribute("user_name",result_user.getName());
+		System.out.println("User is "+result_user.getName());
+		
+	} catch (UserNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	}
 	
-	return "test2";
+	
+	RequestHelper.setAttribute("Filter", input);
+	return "CardSearch";
 	}
+	
+	
+	
+	
+	
 	@RequestMapping(value = "new_order", method = RequestMethod.GET)
 	public String printHello7(@RequestParam(defaultValue = "null") String user_id) {
 	

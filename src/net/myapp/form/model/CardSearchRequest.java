@@ -1,8 +1,9 @@
-package net.myapp.model.form;
+package net.myapp.form.model;
 
 public class CardSearchRequest extends MainRequest {
 String pin_email="";
 String code="";
+
 public String getPin_email() {
 	return pin_email;
 }
