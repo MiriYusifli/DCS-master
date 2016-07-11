@@ -15,11 +15,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.sun.org.apache.xpath.internal.operations.Or;
-
-import net.myapp.model.Groups;
-import net.myapp.model.Teacher;
-
 @Entity
 @Table(name = "user_card")
 public class UserCard {
