@@ -74,8 +74,10 @@
                 </div>
               </div>
              
+             <p id="test">${user_name}</p>
+             
 
-			<button type="submit" name="ok" class="btn btn-default"  style="position:absolute; left:60%;top:0%;">
+			<button type="submit" name="ok"  class="btn btn-default"  style="position:absolute; left:60%;top:0%;">
      			 <span class="glyphicon glyphicon-search"></span> Search
     		</button>
              
@@ -85,13 +87,17 @@
         </div>
       </div>
     </div>
+    
+    
+    
+    
 	   
 	   <form action="">
-	   <input type="hidden" name="user_id" value="${user_id}">
+	   <input type="hidden" id="user_id" value="${user_id}" >
 	   
-	   <button type="submit" class="btn btn-default" style="position:absolute; left:40%;top:35%;">Yeni sifaris</button>
-	   <button type="submit" class="btn btn-default" style="position:absolute; left:65%;top:35%;">Yeni kart</button>
-	   <button type="submit" class="btn btn-default" style="position:absolute; left:65%;top:45%;">Melumat</button>
+	   <button type="submit" id="new_order" class="btn btn-default" style="position:absolute; left:40%;top:35%;display:none;">Yeni sifaris</button>
+	   <button type="submit" id="new_card" class="btn btn-default" style="position:absolute; left:65%;top:35%;display:none;">Yeni kart</button>
+	   <button type="submit" id="info" class="btn btn-default" style="position:absolute; left:65%;top:45%;display:none;">Melumat</button>
 	   
 	   
 	   </form>
@@ -104,7 +110,22 @@
 
     </div>
 	
-	
+	<script>
+$(document).ready(function(){
+    
+    	var p=document.getElementById('test').textContent
+		if(p.trim()){
+            $('#new_card').show();
+            $('#new_order').show();
+            $('#info').show();
+
+		}
+
+});
+
+
+</script>
+
 	
 	
 	

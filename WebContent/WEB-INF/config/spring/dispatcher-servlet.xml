@@ -105,9 +105,23 @@
         <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
     </beans:bean>
     
+   
+    
+     <beans:bean id="userCardDAO" class="net.myapp.hbr.dao.UserCardDAOImpl">
+        <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+    </beans:bean>
+    
+  <beans:bean id="cardDAO" class="net.myapp.hbr.dao.CardDAOImpl">
+        <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+    </beans:bean>
+    
     <beans:bean id="secureUserDAO" class="net.myapp.dao.SecureUserDAOImpl">
         <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
     </beans:bean>
+    
+    
+     
+    
     
     <tx:annotation-driven transaction-manager="transactionManager"/>
     <beans:bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">

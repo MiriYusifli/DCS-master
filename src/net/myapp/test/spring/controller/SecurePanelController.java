@@ -6,11 +6,13 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,10 +29,14 @@ import net.myapp.dao.model.SecureUserEnum;
 import net.myapp.dao.model.User;
 import net.myapp.dao.model.UserCard;
 import net.myapp.exception.user.UserNotFoundException;
+import net.myapp.form.model.AddUserRequest;
 import net.myapp.form.model.CardSearchRequest;
+import net.myapp.hbr.dao.CardDAOImpl;
+import net.myapp.hbr.dao.UserCardDAOImpl;
 import net.myapp.hbr.dao.UserDAOImpl;
 import net.myapp.helper.CommonUtil;
 import net.myapp.helper.SecureUserUtil;
+import net.myapp.helper.dao.DataUtilStrParameter;
 import net.myapp.helper.secure.Utils;
 @Controller
 
@@ -45,6 +51,15 @@ public class SecurePanelController {
 	@Autowired(required = true)
 	@Qualifier(value = "userDAO")
 	private UserDAOImpl userDAOImpl;
+	
+	@Autowired(required = true)
+	@Qualifier(value = "cardDAO")
+	private CardDAOImpl cardDAOImpl;
+	
+	
+	@Autowired(required = true)
+	@Qualifier(value = "userCardDAO")
+	private UserCardDAOImpl userCardDAOImpl;
 	//// normal page passing to default/jsp folder page inside of main.jsp
 	@RequestMapping(value = "panel/login", method = RequestMethod.GET)
 	public String printHello(@RequestParam(defaultValue = "null") String login,
@@ -130,7 +145,7 @@ public class SecurePanelController {
 	@RequestMapping(value = "test1", method = RequestMethod.GET)
 	public String printHello5() {
 	User user=userDAOImpl.getById(1);
-	System.out.println(user.getName());
+	System.out.println("user is "+user.getName());
 for (UserCard userCard : user.getUserCardSet()) {
 	System.out.println(userCard.getBalance());
 }		
@@ -173,10 +188,11 @@ for (UserCard userCard : user.getUserCardSet()) {
 	
 	
 	
-	
 	@RequestMapping(value = "new_order", method = RequestMethod.GET)
 	public String printHello7(@RequestParam(defaultValue = "null") String user_id) {
-	
+	User user=new User();
+		
+		
 	return "new_order";
 	}
 	//branch m_11_07
@@ -186,5 +202,53 @@ for (UserCard userCard : user.getUserCardSet()) {
 	return "new_card";
 	}
 	
+	@Transactional
+	@RequestMapping(value = "add_user", method = RequestMethod.GET)
+	public String printHello9(AddUserRequest input) {
+		User user=new User();
+		UserCard userCard=new UserCard();
+		Card card=new Card();
+		if(input.isNotNullSubmitOk()) {
+			
+			
+			
+			card=cardDAOImpl.getByCode(input.getCardCode());
+			
+			//set ucun daha yaxshi yol tapmadim )
+			user.setName(input.getName());
+			user.setSurname(input.getSurname());
+			user.setGender(input.getGender());
+			user.setEmail(input.getEmail());
+			user.setPhone(input.getPhone());
+			user.setPhonework(input.getPhonework());
+			user.setSpecialty(input.getSpecialty());
+			user.setCity(input.getCity());
+			user.setPin(input.getPin());
+			user.setPass("123");
+			
+			
+			
+			//dediyiniz kimi heleki elnen daxil edirik,bunlar yoxdu
+			SecureUser seller=new SecureUser();
+			seller.setName("Ayxan");
+			seller.setId(2);
+			
+			userCard.setUser(user);
+			userCard.setCard(card);
+			userCard.setBalance(0);
+			userCard.setDiscount(0);
+			userCard.setSeller(seller);
+			userCard.setStatus(0);
+			userCard.setValid_from(CommonUtil.getCurrentDateAndTime());
+			userCard.setValid_to(CommonUtil.findValidTo(userCard.getValid_from(),60));
+			
+			
+			//commonUtilDAO.beginTransaction();
+			userDAOImpl.add(user);
+			userCardDAOImpl.add(userCard);
+			//commonUtilDAO.closeTransaction();
+		}
+	return "AddUser";
+	}
 	
 }
