@@ -38,20 +38,6 @@ public class CommonUtil {
 		return false;
 	}
 	
-	public static  Date getCurrentDateAndTime(){
-		DateFormat df = new SimpleDateFormat("dd/MM/yy");
-		Date dateobj = new Date();
-		return dateobj;
-	}
-	
-	
-	public static  Date findValidTo(Date today,int month){
-		int month_from=today.getMonth();
-		int month_to=month_from+month;
-		today.setMonth(month_to);
-		
-		return today;
-	}
 	
 	
 }

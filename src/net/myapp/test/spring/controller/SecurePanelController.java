@@ -29,12 +29,14 @@ import net.myapp.dao.model.SecureUserEnum;
 import net.myapp.dao.model.User;
 import net.myapp.dao.model.UserCard;
 import net.myapp.exception.user.UserNotFoundException;
+import net.myapp.exception.user.UserNotValidPinException;
 import net.myapp.form.model.AddUserRequest;
 import net.myapp.form.model.CardSearchRequest;
 import net.myapp.hbr.dao.CardDAOImpl;
 import net.myapp.hbr.dao.UserCardDAOImpl;
 import net.myapp.hbr.dao.UserDAOImpl;
 import net.myapp.helper.CommonUtil;
+import net.myapp.helper.DateUtil;
 import net.myapp.helper.SecureUserUtil;
 import net.myapp.helper.dao.DataUtilStrParameter;
 import net.myapp.helper.secure.Utils;
@@ -107,37 +109,43 @@ public class SecurePanelController {
 	public String printHello4() {
 		
 		
-		for (UserCard userCard : userDAOImpl.getById(1).getUserCardSet()) {
-
-			/*System.out.println("user balance : "+userCard.getBalance());
-			System.out.println("seller name : "+userCard.getSeller().getName());
-			System.out.println("card code :"+userCard.getCard().getCode());
-			System.out.println("card type :"+userCard.getCard().getCardType().getName());
-			*/
-			
-			RequestHelper.setAttribute("UserCard",userCard);
-			
-			List<Object[]> list;
+		for (UserCard userCard : userDAOImpl.getById(1).getUserCardSet())
 			try {
-				list = userDAOImpl.getTest(userCard);
-				RequestHelper.setAttribute("Report",list);
-				
-			} catch (UserNotFoundException e) {
+				{
+
+					/*System.out.println("user balance : "+userCard.getBalance());
+					System.out.println("seller name : "+userCard.getSeller().getName());
+					System.out.println("card code :"+userCard.getCard().getCode());
+					System.out.println("card type :"+userCard.getCard().getCardType().getName());
+					*/
+					
+					RequestHelper.setAttribute("UserCard",userCard);
+					
+					List<Object[]> list;
+					try {
+						list = userDAOImpl.getTest(userCard);
+						RequestHelper.setAttribute("Report",list);
+						
+					} catch (UserNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					/*System.out.println("*()");
+						for (Object[] objects : list) {
+						System.out.println(objects[0].toString());
+				        System.out.println(objects[1].toString());
+				        System.out.println(objects[2].toString());
+				        System.out.println(objects[3].toString());
+				        System.out.println(objects[4].toString());
+				        System.out.println(objects[5].toString());
+				        System.out.println(objects[6].toString());
+
+					}*/
+				}
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			/*System.out.println("*()");
-				for (Object[] objects : list) {
-				System.out.println(objects[0].toString());
-                System.out.println(objects[1].toString());
-                System.out.println(objects[2].toString());
-                System.out.println(objects[3].toString());
-                System.out.println(objects[4].toString());
-                System.out.println(objects[5].toString());
-                System.out.println(objects[6].toString());
-
-			}*/
-		}
 		return "test";
 	}
 
@@ -169,13 +177,14 @@ for (UserCard userCard : user.getUserCardSet()) {
 	
 	try {
 		List<Object[]> usercardList = userDAOImpl.getTest(userCard);
-		User result_user=(User) usercardList.get(0)[0];
-		RequestHelper.setAttribute("user_id",result_user.getId());
-		RequestHelper.setAttribute("user_name",result_user.getName());
-		System.out.println("User is "+result_user.getName());
+		User foundUser=(User) usercardList.get(0)[0];
+		RequestHelper.setAttribute("User",foundUser);
 		
 	} catch (UserNotFoundException e) {
-		// TODO Auto-generated catch block
+		e.addErrorKeyArgToRequestHelper();
+		e.printStackTrace();
+	} catch (UserNotValidPinException e) {
+		//we dont worry about info to user interface , only in log print exception
 		e.printStackTrace();
 	}
 	}
@@ -183,23 +192,6 @@ for (UserCard userCard : user.getUserCardSet()) {
 	
 	RequestHelper.setAttribute("Filter", input);
 	return "CardSearch";
-	}
-	
-	
-	
-	
-	@RequestMapping(value = "new_order", method = RequestMethod.GET)
-	public String printHello7(@RequestParam(defaultValue = "null") String user_id) {
-	User user=new User();
-		
-		
-	return "new_order";
-	}
-	//branch m_11_07
-	@RequestMapping(value = "new_card", method = RequestMethod.GET)
-	public String printHello8(@RequestParam(defaultValue = "null") String user_id) {
-	
-	return "new_card";
 	}
 	
 	@Transactional
@@ -239,8 +231,8 @@ for (UserCard userCard : user.getUserCardSet()) {
 			userCard.setDiscount(0);
 			userCard.setSeller(seller);
 			userCard.setStatus(0);
-			userCard.setValid_from(CommonUtil.getCurrentDateAndTime());
-			userCard.setValid_to(CommonUtil.findValidTo(userCard.getValid_from(),60));
+			userCard.setValid_from(DateUtil.getCurrentDateAndTime());
+			userCard.setValid_to(DateUtil.findValidTo(userCard.getValid_from(),60));
 			
 			
 			//commonUtilDAO.beginTransaction();
@@ -249,6 +241,36 @@ for (UserCard userCard : user.getUserCardSet()) {
 			//commonUtilDAO.closeTransaction();
 		}
 	return "AddUser";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	
+	
+	
+	@RequestMapping(value = "new_order", method = RequestMethod.GET)
+	public String printHello7(@RequestParam(defaultValue = "null") String user_id) {
+	User user=new User();
+		
+		
+	return "new_order";
+	}
+	//branch m_11_07
+	@RequestMapping(value = "new_card", method = RequestMethod.GET)
+	public String printHello8(@RequestParam(defaultValue = "null") String user_id) {
+	
+	return "new_card";
 	}
 	
 }

@@ -74,7 +74,6 @@
                 </div>
               </div>
              
-             <p id="test">${user_name}</p>
              
 
 			<button type="submit" name="ok"  class="btn btn-default"  style="position:absolute; left:60%;top:0%;">
@@ -91,16 +90,22 @@
     
     
     
-	   
+	   <c:if test="${not empty User}">
+	  
 	   <form action="">
-	   <input type="hidden" id="user_id" value="${user_id}" >
-	   
-	   <button type="submit" id="new_order" class="btn btn-default" style="position:absolute; left:40%;top:35%;display:none;">Yeni sifaris</button>
-	   <button type="submit" id="new_card" class="btn btn-default" style="position:absolute; left:65%;top:35%;display:none;">Yeni kart</button>
-	   <button type="submit" id="info" class="btn btn-default" style="position:absolute; left:65%;top:45%;display:none;">Melumat</button>
-	   
-	   
+	     <input type="hidden" id="user_id" value="${User.id}" >
+	     <p id="test">${User.name}</p>
+         <button type="submit" id="new_order" class="btn btn-default" style="position:absolute; left:40%;top:35%;">Yeni sifaris</button>
+	     <button type="submit" id="new_card" class="btn btn-default" style="position:absolute; left:65%;top:35%;">Yeni kart</button>
+	     <button type="submit" id="info" class="btn btn-default" style="position:absolute; left:65%;top:45%;">Melumat</button>
 	   </form>
+	  
+	  
+	   </c:if>
+	   <c:if test="${not empty ErrorKey}">
+	 
+	  <spring:message code="${ErrorKey}" arguments="${ErrorArg}"/>
+	   </c:if>
 	   
 	   
     
@@ -110,7 +115,7 @@
 
     </div>
 	
-	<script>
+	<!-- <script>
 $(document).ready(function(){
     
     	var p=document.getElementById('test').textContent
@@ -125,7 +130,7 @@ $(document).ready(function(){
 
 
 </script>
-
+ -->
 	
 	
 	

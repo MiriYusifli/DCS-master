@@ -11,8 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import net.myapp.dao.model.User;
 import net.myapp.dao.model.UserCard;
 import net.myapp.exception.user.UserNotFoundException;
+import net.myapp.exception.user.UserNotValidPinException;
 import net.myapp.helper.CommonUtil;
 import net.myapp.helper.dao.DataUtilStrParameter;
+import net.myapp.validity.user.UserValidity;
 
 @Repository
 public class UserDAOImpl {
@@ -57,7 +59,7 @@ public class UserDAOImpl {
     
     
     @Transactional
-    public List<Object[]> getTest(UserCard card) throws UserNotFoundException {
+    public List<Object[]> getTest(UserCard card) throws UserNotFoundException, UserNotValidPinException {
         Session session = this.sessionFactory.getCurrentSession(); 
         
         DataUtilStrParameter.clean();//for re initialized parameters list
@@ -74,6 +76,7 @@ public class UserDAOImpl {
         	DataUtilStrParameter.add(card.getUser().getEmail());
         }
         if(!CommonUtil.isNullOrEmpty(card.getUser().getPin())) {
+        	if (!UserValidity.checkPin(card.getUser().getPin()))  throw new UserNotValidPinException(card.getUser().getPin());  
         	hql+=" AND  u.pin=?";
         	DataUtilStrParameter.add(card.getUser().getPin());
         }

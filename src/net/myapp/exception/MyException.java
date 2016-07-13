@@ -1,5 +1,7 @@
 package net.myapp.exception;
 
+import net.myapp.common.web.holders.RequestHelper;
+
 public class MyException extends Exception {
 	   protected String errorDescription;//for log
 	   protected String i18nErrorMessageKey;
@@ -29,7 +31,15 @@ public class MyException extends Exception {
 		this.i18nErrorMessageArg = i18nErrorMessageArg;
 	}
 	   
-	   
-	  
+	@Override
+	public String getMessage() {
+		return this.getErrorDescription();
+	} 
+	
+	
+	public void addErrorKeyArgToRequestHelper() {
+		RequestHelper.setAttribute("ErrorKey", this.getI18nErrorMessageKey());
+		RequestHelper.setAttribute("ErrorArg", this.getI18nErrorMessageArg());
+	}
 
 }

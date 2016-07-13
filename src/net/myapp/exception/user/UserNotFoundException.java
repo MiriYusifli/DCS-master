@@ -6,16 +6,13 @@ import net.myapp.exception.MyException;
 
 public class UserNotFoundException extends MyException{
 
-	
-public UserNotFoundException(String login) {
-	this.setErrorDescription("user not found: "+login);
+//private static final long serialVersionUID = 8113746196212907523L;
+public UserNotFoundException(String input) {
+	this.setErrorDescription("user not found: "+input);
 	this.setI18nErrorMessageKey("NOT_FOUND");
-    this.setI18nErrorMessageArg(login);	
+    this.setI18nErrorMessageArg(input);	
 }
-@Override
-public String getMessage() {
-	return this.getErrorDescription();
-}
+
 
 
 }
