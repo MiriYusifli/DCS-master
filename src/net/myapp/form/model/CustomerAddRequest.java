@@ -1,6 +1,6 @@
 package net.myapp.form.model;
 
-public class AddUserRequest extends MainRequest {
+public class CustomerAddRequest extends MainRequest {
 	String name="";
 	String surname="";
 	String gender="";

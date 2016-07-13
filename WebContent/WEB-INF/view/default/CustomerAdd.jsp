@@ -54,12 +54,14 @@
       <div class="container">
         <div class="row">
           <div class="col-md-12">
-		  <h1 style="position:absolute; left:50%;top:0%;">Yeni musteri</h1> 
+		  <h1 style="position:absolute; left:50%;top:0%;">
+		  <spring:message code="title.customeradd"/>
+	     </h1> 
             <form class="form-horizontal" role="form" style="position:absolute; left:10%;top:10000%; width:100%;">
 			 
               <div class="form-group">
                 <div class="col-sm-2">
-                  <label for="inputEmail3" class="control-label">Adi </label>
+                  <label for="inputEmail3" class="control-label"><spring:message code="label.name"/> </label>
                 </div>
                 <div class="col-sm-4">
                   <input type="text"  class="form-control" name="name"  >
@@ -67,7 +69,7 @@
               </div>
               <div class="form-group">
                 <div class="col-sm-2">
-                  <label for="inputPassword3" class="control-label">Soyadi</label>
+                  <label for="inputPassword3" class="control-label"><spring:message code="label.surname"/></label>
                 </div>
                 <div class="col-sm-4">
                   <input type="text"    class="form-control" name="surname" >

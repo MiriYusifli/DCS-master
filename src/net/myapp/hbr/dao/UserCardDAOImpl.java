@@ -19,7 +19,6 @@ private SessionFactory sessionFactory;
         this.sessionFactory = sf;
     }
  
-    @Transactional
     public void add(UserCard p) {
         Session session = this.sessionFactory.getCurrentSession();
         session.persist(p);

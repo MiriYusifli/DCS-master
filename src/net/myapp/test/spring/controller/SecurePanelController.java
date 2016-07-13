@@ -1,13 +1,8 @@
 package net.myapp.test.spring.controller;
 
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
@@ -22,24 +17,23 @@ import net.myapp.common.web.holders.RequestHelper;
 import net.myapp.common.web.holders.WebAuthHelper;
 import net.myapp.common.web.holders.WebSessionHelper;
 import net.myapp.dao.SecureUserDAO;
-import net.myapp.dao.SecureUserDAOImpl;
 import net.myapp.dao.model.Card;
 import net.myapp.dao.model.SecureUser;
-import net.myapp.dao.model.SecureUserEnum;
 import net.myapp.dao.model.User;
 import net.myapp.dao.model.UserCard;
+import net.myapp.exception.card.CardNotFoundException;
 import net.myapp.exception.user.UserNotFoundException;
 import net.myapp.exception.user.UserNotValidPinException;
-import net.myapp.form.model.AddUserRequest;
 import net.myapp.form.model.CardSearchRequest;
+import net.myapp.form.model.CustomerAddRequest;
 import net.myapp.hbr.dao.CardDAOImpl;
 import net.myapp.hbr.dao.UserCardDAOImpl;
 import net.myapp.hbr.dao.UserDAOImpl;
 import net.myapp.helper.CommonUtil;
 import net.myapp.helper.DateUtil;
 import net.myapp.helper.SecureUserUtil;
-import net.myapp.helper.dao.DataUtilStrParameter;
 import net.myapp.helper.secure.Utils;
+import net.myapp.service.UserCardService;
 @Controller
 
 public class SecurePanelController {
@@ -62,6 +56,11 @@ public class SecurePanelController {
 	@Autowired(required = true)
 	@Qualifier(value = "userCardDAO")
 	private UserCardDAOImpl userCardDAOImpl;
+	
+
+	@Autowired(required = true)
+	@Qualifier(value = "userCardService")
+	private UserCardService userCardService;
 	//// normal page passing to default/jsp folder page inside of main.jsp
 	@RequestMapping(value = "panel/login", method = RequestMethod.GET)
 	public String printHello(@RequestParam(defaultValue = "null") String login,
@@ -194,53 +193,17 @@ for (UserCard userCard : user.getUserCardSet()) {
 	return "CardSearch";
 	}
 	
-	@Transactional
-	@RequestMapping(value = "add_user", method = RequestMethod.GET)
-	public String printHello9(AddUserRequest input) {
-		User user=new User();
-		UserCard userCard=new UserCard();
-		Card card=new Card();
-		if(input.isNotNullSubmitOk()) {
-			
-			
-			
-			card=cardDAOImpl.getByCode(input.getCardCode());
-			
-			//set ucun daha yaxshi yol tapmadim )
-			user.setName(input.getName());
-			user.setSurname(input.getSurname());
-			user.setGender(input.getGender());
-			user.setEmail(input.getEmail());
-			user.setPhone(input.getPhone());
-			user.setPhonework(input.getPhonework());
-			user.setSpecialty(input.getSpecialty());
-			user.setCity(input.getCity());
-			user.setPin(input.getPin());
-			user.setPass("123");
-			
-			
-			
-			//dediyiniz kimi heleki elnen daxil edirik,bunlar yoxdu
-			SecureUser seller=new SecureUser();
-			seller.setName("Ayxan");
-			seller.setId(2);
-			
-			userCard.setUser(user);
-			userCard.setCard(card);
-			userCard.setBalance(0);
-			userCard.setDiscount(0);
-			userCard.setSeller(seller);
-			userCard.setStatus(0);
-			userCard.setValid_from(DateUtil.getCurrentDateAndTime());
-			userCard.setValid_to(DateUtil.findValidTo(userCard.getValid_from(),60));
-			
-			
-			//commonUtilDAO.beginTransaction();
-			userDAOImpl.add(user);
-			userCardDAOImpl.add(userCard);
-			//commonUtilDAO.closeTransaction();
+	
+	@RequestMapping(value = "customer/add", method = RequestMethod.GET)
+	public String page_customer_add(CustomerAddRequest input) {
+		if(input.isNotNullSubmitOk()) {try {
+			userCardService.add(input);
+		} catch (UserNotValidPinException | CardNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-	return "AddUser";
+		}
+	return "CustomerAdd";
 	}
 	
 	

@@ -25,7 +25,6 @@ public class UserDAOImpl {
         this.sessionFactory = sf;
     }
  
-    @Transactional
     public void add(User p) {
         Session session = this.sessionFactory.getCurrentSession();
         session.persist(p);

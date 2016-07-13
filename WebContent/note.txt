@@ -1,0 +1,34 @@
+1)interface for define a set of methods
+and implement it
+you are create CardDAO interface without methids head-that is haven't any means?(maybe i laso do it anywhere:)))
+2)the name of page we are define in technical doc on the top-right
+for example customer/add
+Then name rules:
+then ...form: CustomerAddRequest
+view  name:CustomerAdd.jsp
+(bu hemin yerde olmayada biler men deyiwerem sonradan fikirlewib amma razilawmani nezerine catdiriram <<inner convention>>)
+3)build/classess/.gitignore
+bu nedirse her defe sen commit edende yaranir
+bunu nese hell etmek lazimdi
+yaranmasin:)
+4)commit name rules
+parentName_branchname
+F1.0.1_M1
+F1.0.1_M2
+commit description 
+F1.0.1_M1  edilen deyiwikliyin umimi title
+
+-userin axtariwdan sonraki buttonlarin page gosterilmesi 
+-user elave edilen page
+-ve sair
+
+
+
+
+5)card/search
+ jstl etmek daha yaxwidi user tapilib tapilmayanda
+ backend etmek olan weylere js etmesek daha yaxwi olar
+6)add  label title in i18e file  in english version 
+in the end we are going to cope and create for example az version this file
+7)name page rules
+customer/add---->page_customer_add  method name in spring controller
