@@ -87,11 +87,16 @@ public class UserDAOImpl {
         	hql=hql+" AND  uc.id=?";
         	DataUtilStrParameter.add(card.getId());
         }
+        /*if(!CommonUtil.isNull(card.getUser().getId()) && card.getUser().getId()!=0) {
+        	hql=hql+" AND  u.id=?";
+        	DataUtilStrParameter.add(card.getUser().getId());
+        }*/
         System.out.println("hql is "+hql);
         Query query = session.createQuery(hql);
         DataUtilStrParameter.setParameter(query);
        // query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
         //List list = query.list();
+       // System.out.println("query is "+query);
         List<Object[]> list = query.list();
         
         if (CommonUtil.isEmpty(list))  throw new UserNotFoundException("---");

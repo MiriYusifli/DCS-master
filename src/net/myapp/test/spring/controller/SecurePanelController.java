@@ -169,8 +169,9 @@ for (UserCard userCard : user.getUserCardSet()) {
 	  if(CommonUtil.isEmail(input.getPin_email())) 	user.setEmail(input.getPin_email());
 	  else                                          user.setPin(input.getPin_email());
 	card.setCode(input.getCode());
-
 	
+	//test ucun id e 1 atiram ki int oldugu ucun error cixir
+	userCard.setId(1);
 	userCard.setUser(user);
 	userCard.setCard(card);
 	
@@ -234,6 +235,33 @@ for (UserCard userCard : user.getUserCardSet()) {
 	public String printHello8(@RequestParam(defaultValue = "null") String user_id) {
 	
 	return "new_card";
+	}
+	
+	
+	
+	@RequestMapping(value = "user/panel", method = RequestMethod.GET)
+	public String page_panel(User user) {
+		UserCard userCard=new UserCard();
+		Card card=new Card();
+		userCard.setUser(user);
+		userCard.setCard(card);
+		
+		try {
+			List<Object[]> usercardList = userDAOImpl.getTest(userCard);
+			User foundUser=(User) usercardList.get(0)[0];
+			RequestHelper.setAttribute("User",foundUser);
+			
+			
+		} catch (UserNotFoundException | UserNotValidPinException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		
+		
+	return "UserPanel";
 	}
 	
 }

@@ -26,11 +26,11 @@ public class DataUtilStrParameter {
 	
 	public static void setParameter(Query query){
 		int i=0;
+		
 		for (String string : hbrParameterList) {
 			query.setParameter(i, string);
 			i++;
 		}
-		
 	}
 	
 	
