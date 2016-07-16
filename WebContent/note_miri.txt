@@ -1,0 +1,5 @@
+1)neye gore js den yox jstl istifade edim??
+2)Niye UserCardServiceImpl deyil UserCardService istifade edirsiz , yeni 
+Interface den nece istifade edirsiz ? (burani qeti basha dusmemishem , sadece sizin yolunuzdan getmishem )) 
+
+?

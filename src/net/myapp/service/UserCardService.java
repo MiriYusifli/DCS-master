@@ -8,5 +8,5 @@ import net.myapp.form.model.CustomerAddRequest;
 public interface UserCardService {
   public void add(UserCard userCard);
   public void add(CustomerAddRequest input) throws UserNotValidPinException, CardNotFoundException;
-	
+  
 }

@@ -3,6 +3,8 @@ package net.myapp.test.spring.controller;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+import javax.persistence.criteria.Order;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
@@ -18,6 +20,7 @@ import net.myapp.common.web.holders.WebAuthHelper;
 import net.myapp.common.web.holders.WebSessionHelper;
 import net.myapp.dao.SecureUserDAO;
 import net.myapp.dao.model.Card;
+import net.myapp.dao.model.CardType;
 import net.myapp.dao.model.SecureUser;
 import net.myapp.dao.model.User;
 import net.myapp.dao.model.UserCard;
@@ -27,22 +30,30 @@ import net.myapp.exception.user.UserNotValidPinException;
 import net.myapp.form.model.CardSearchRequest;
 import net.myapp.form.model.CustomerAddRequest;
 import net.myapp.hbr.dao.CardDAOImpl;
+import net.myapp.hbr.dao.CardTypeDAOImpl;
 import net.myapp.hbr.dao.UserCardDAOImpl;
 import net.myapp.hbr.dao.UserDAOImpl;
 import net.myapp.helper.CommonUtil;
 import net.myapp.helper.DateUtil;
 import net.myapp.helper.SecureUserUtil;
 import net.myapp.helper.secure.Utils;
+import net.myapp.notification.CardNotifications;
+import net.myapp.service.CardService;
+import net.myapp.service.CardServiceImpl;
 import net.myapp.service.UserCardService;
 @Controller
 
 public class SecurePanelController {
 	@Autowired
 	private MessageSource messageSource;
-
+	
+	
 	@Autowired(required = true)
 	@Qualifier(value = "secureUserDAO")
 	private SecureUserDAO secureUserDAO;
+
+
+	
 
 	@Autowired(required = true)
 	@Qualifier(value = "userDAO")
@@ -54,6 +65,10 @@ public class SecurePanelController {
 	
 	
 	@Autowired(required = true)
+	@Qualifier(value = "cardTypeDAO")
+	private CardTypeDAOImpl cardTypeDAOImpl;
+	
+	@Autowired(required = true)
 	@Qualifier(value = "userCardDAO")
 	private UserCardDAOImpl userCardDAOImpl;
 	
@@ -61,6 +76,13 @@ public class SecurePanelController {
 	@Autowired(required = true)
 	@Qualifier(value = "userCardService")
 	private UserCardService userCardService;
+	
+	
+	@Autowired(required = true)
+	@Qualifier(value = "cardService")
+	private CardService cardService;
+	
+	
 	//// normal page passing to default/jsp folder page inside of main.jsp
 	@RequestMapping(value = "panel/login", method = RequestMethod.GET)
 	public String printHello(@RequestParam(defaultValue = "null") String login,
@@ -171,7 +193,7 @@ for (UserCard userCard : user.getUserCardSet()) {
 	card.setCode(input.getCode());
 	
 	//test ucun id e 1 atiram ki int oldugu ucun error cixir
-	userCard.setId(1);
+	//userCard.setId(1);
 	userCard.setUser(user);
 	userCard.setCard(card);
 	
@@ -247,11 +269,24 @@ for (UserCard userCard : user.getUserCardSet()) {
 		userCard.setCard(card);
 		
 		try {
-			List<Object[]> usercardList = userDAOImpl.getTest(userCard);
-			User foundUser=(User) usercardList.get(0)[0];
-			RequestHelper.setAttribute("User",foundUser);
+
+			
+			List<Object[]> usercardList = userDAOImpl.getTestIntParam(userCard);
+			
+			UserCard foundUserCard=(UserCard) usercardList.get(0)[1];
+			
+			RequestHelper.setAttribute("User",usercardList);
+			
+		
+			cardService.PassNextCard(foundUserCard.getCard());
 			
 			
+			
+			
+			
+			
+				
+				
 		} catch (UserNotFoundException | UserNotValidPinException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

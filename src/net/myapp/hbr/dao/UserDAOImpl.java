@@ -13,6 +13,7 @@ import net.myapp.dao.model.UserCard;
 import net.myapp.exception.user.UserNotFoundException;
 import net.myapp.exception.user.UserNotValidPinException;
 import net.myapp.helper.CommonUtil;
+import net.myapp.helper.dao.DataUtilIntParameter;
 import net.myapp.helper.dao.DataUtilStrParameter;
 import net.myapp.validity.user.UserValidity;
 
@@ -94,6 +95,46 @@ public class UserDAOImpl {
         System.out.println("hql is "+hql);
         Query query = session.createQuery(hql);
         DataUtilStrParameter.setParameter(query);
+       // query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+        //List list = query.list();
+       // System.out.println("query is "+query);
+        List<Object[]> list = query.list();
+        
+        if (CommonUtil.isEmpty(list))  throw new UserNotFoundException("---");
+		/*for(Object[] arr : list){
+			UserCard userCard=(UserCard) arr[0];
+	     	Order order=(Order) arr[1];
+			System.out.println(userCard.getBalance()+"   "+order.getTotal_amount());
+		} 
+		*/return list;
+    }
+    
+    
+    @Transactional
+    public List<Object[]> getTestIntParam(UserCard card) throws UserNotFoundException, UserNotValidPinException {
+        Session session = this.sessionFactory.getCurrentSession(); 
+        
+        DataUtilIntParameter.clean();//for re initialized parameters list
+        String hql="select u,uc,o,od,g,c,ct from UserCard uc "
+				                         +" INNER JOIN uc.orderSet as o"
+				                         +" INNER JOIN o.orderDetailSet as od"
+				                         +" INNER JOIN od.good as g"
+				                         +" INNER JOIN uc.card as c"
+				                         +" INNER JOIN c.cardType as ct"
+				                         +" INNER JOIN uc.user  as u"
+				                         +" Where 1=1 ";
+      
+        if(!CommonUtil.isNull(card.getId()) && card.getId()!=0) {
+        	hql=hql+" AND  uc.id=?";
+        	DataUtilIntParameter.add(card.getId());
+        }
+        if(!CommonUtil.isNull(card.getUser().getId()) && card.getUser().getId()!=0) {
+        	hql=hql+" AND  u.id=?";
+        	DataUtilIntParameter.add(card.getUser().getId());
+        }
+        System.out.println("hql is "+hql);
+        Query query = session.createQuery(hql);
+        DataUtilIntParameter.setParameter(query);
        // query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
         //List list = query.list();
        // System.out.println("query is "+query);

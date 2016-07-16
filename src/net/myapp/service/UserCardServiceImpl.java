@@ -3,6 +3,7 @@ package net.myapp.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import net.myapp.dao.model.CardType;
 import net.myapp.dao.model.SecureUser;
 import net.myapp.dao.model.User;
 import net.myapp.dao.model.UserCard;
@@ -44,6 +45,8 @@ public class UserCardServiceImpl implements UserCardService{
 
 	@Override
 	public void add(CustomerAddRequest input) throws UserNotValidPinException, CardNotFoundException {
+		
+		
 		UserCard userCard=new UserCard();
 		userCard.setBalance(0);
 		userCard.setDiscount(0);
@@ -85,5 +88,11 @@ public class UserCardServiceImpl implements UserCardService{
 		
 		
 	}
+	
+	
+		
+		
+		
+	
 
 }
