@@ -1,7 +1,5 @@
 package net.myapp.hbr.dao;
 
-import java.util.List;
-
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -9,11 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import net.myapp.dao.model.Card;
-import net.myapp.dao.model.UserCard;
-import net.myapp.exception.user.UserNotFoundException;
-import net.myapp.helper.CommonUtil;
-import net.myapp.helper.dao.DataUtilStrParameter;
-  
+
 
 @Repository
 public class CardDAOImpl {

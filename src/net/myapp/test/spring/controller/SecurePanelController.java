@@ -3,13 +3,10 @@ package net.myapp.test.spring.controller;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-import javax.persistence.criteria.Order;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,7 +17,6 @@ import net.myapp.common.web.holders.WebAuthHelper;
 import net.myapp.common.web.holders.WebSessionHelper;
 import net.myapp.dao.SecureUserDAO;
 import net.myapp.dao.model.Card;
-import net.myapp.dao.model.CardType;
 import net.myapp.dao.model.SecureUser;
 import net.myapp.dao.model.User;
 import net.myapp.dao.model.UserCard;
@@ -34,12 +30,9 @@ import net.myapp.hbr.dao.CardTypeDAOImpl;
 import net.myapp.hbr.dao.UserCardDAOImpl;
 import net.myapp.hbr.dao.UserDAOImpl;
 import net.myapp.helper.CommonUtil;
-import net.myapp.helper.DateUtil;
 import net.myapp.helper.SecureUserUtil;
 import net.myapp.helper.secure.Utils;
-import net.myapp.notification.CardNotifications;
 import net.myapp.service.CardService;
-import net.myapp.service.CardServiceImpl;
 import net.myapp.service.UserCardService;
 @Controller
 
@@ -262,12 +255,21 @@ for (UserCard userCard : user.getUserCardSet()) {
 	
 	
 	@RequestMapping(value = "user/panel", method = RequestMethod.GET)
-	public String page_panel(User user) {
+	public String page_panel(User user) {//burda  adi string goturek  user_card_id onda atdaki line silinecek
 		UserCard userCard=new UserCard();
 		Card card=new Card();
 		userCard.setUser(user);
 		userCard.setCard(card);
-		
+		/*
+		 * 
+		 * 
+		 * 
+		 * 1)burda report data(orders table olan melumati) ile bawda olan data-ni 2 ayri method alsaq ela olar mence hem readibility artar hemde rahatlawar kod
+		 * 2)cardService cardServiceImpl deyiwek uste basanda lazim olan yere aparsin bizi
+		 * 3)notification exception kimi yanawmisan amma orda daha rahat etmek olar 
+		 * 
+		 * 
+		 */
 		try {
 
 			
@@ -276,9 +278,7 @@ for (UserCard userCard : user.getUserCardSet()) {
 			UserCard foundUserCard=(UserCard) usercardList.get(0)[1];
 			
 			RequestHelper.setAttribute("User",usercardList);
-			
-		
-			cardService.PassNextCard(foundUserCard.getCard());
+			RequestHelper.setAttribute("NextCardInfo",cardService.getNextCardInfo(foundUserCard.getCard(),cardTypeDAOImpl));
 			
 			
 			

@@ -37,17 +37,17 @@
  <c:forEach items="${User}" var="data">    
  
  <p id="info" style="position:absolute;top:15%;">      
- <spring:message code="p.name"/>: ${data[0].name}
+ <spring:message code="user.name"/>: ${data[0].name}
  <br>
- <spring:message code="p.card"/>:${data[6].name}
+ <spring:message code="cardType"/>:${data[6].name}
  <br>
-<spring:message code="p.issueDate"/>:${data[1].valid_from}  
+<spring:message code="validFrom"/>:${data[1].valid_from}  
  <br>
- <spring:message code="p.lastDate"/>:${data[1].valid_to} 
+ <spring:message code="validTo"/>:${data[1].valid_to} 
  <br>
- <spring:message code="p.discount"/>:${data[6].discount}%
+ <spring:message code="discount"/>:${data[6].discount}%
 <br>
-<spring:message code="p.balance"/>: ${data[1].balance}    
+<spring:message code="balance"/>: ${data[1].balance}    
 <br>
 </p>
 </c:forEach>
@@ -60,11 +60,11 @@
     <thead>
       <tr>
         <th>№</th>
-        <th><spring:message code="column.good"/></th>
-        <th><spring:message code="column.price"/></th>
-        <th><spring:message code="column.discount"/></th>
-        <th><spring:message code="column.card"/></th>
-        <th><spring:message code="column.date"/></th>
+        <th><spring:message code="good"/></th>
+        <th><spring:message code="price"/></th>
+        <th><spring:message code="discount"/></th>
+        <th><spring:message code="cardType"/></th>
+        <th><spring:message code="date"/></th>
       </tr>
     </thead>
     <tbody>
@@ -91,12 +91,15 @@
   </table>
 </div>
 
-	<p id="info" style="position:absolute;top:15%;left:55%">  
-	<spring:message code="card.notfication_header"/>
-    <spring:message code="${MinusKey}" arguments="${MinusArg}"/>  
-    <spring:message code="card.notfication_footer"/>
-    <spring:message code="${NameKey}" arguments="${NameArg}"/>  
- 	<p>
+	<p id="info" style="position:absolute;top:15%;left:55%">
+	
+	<c:if test="${not NextCardInfo.canGetNewCard}">  
+	<spring:message code="nextCardInfo" arguments="${NextCardInfo.needableAmountForPassing},${NextCardInfo.name}"/> 
+	</c:if> 
+	<c:if test="${NextCardInfo.canGetNewCard}">  
+	<spring:message code="canGetNewCard" arguments="${NextCardInfo.name}"/> 
+	</c:if> 
+     <p>
     
     
     

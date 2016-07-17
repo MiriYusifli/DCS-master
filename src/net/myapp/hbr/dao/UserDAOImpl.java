@@ -14,7 +14,7 @@ import net.myapp.exception.user.UserNotFoundException;
 import net.myapp.exception.user.UserNotValidPinException;
 import net.myapp.helper.CommonUtil;
 import net.myapp.helper.dao.DataUtilIntParameter;
-import net.myapp.helper.dao.DataUtilStrParameter;
+import net.myapp.helper.dao.DataUtilParameter;
 import net.myapp.validity.user.UserValidity;
 
 @Repository
@@ -62,7 +62,7 @@ public class UserDAOImpl {
     public List<Object[]> getTest(UserCard card) throws UserNotFoundException, UserNotValidPinException {
         Session session = this.sessionFactory.getCurrentSession(); 
         
-        DataUtilStrParameter.clean();//for re initialized parameters list
+        DataUtilParameter.clean();//for re initialized parameters list
         String hql="select u,uc,o,od,g,c,ct from UserCard uc "
 				                         +" INNER JOIN uc.orderSet as o"
 				                         +" INNER JOIN o.orderDetailSet as od"
@@ -73,28 +73,28 @@ public class UserDAOImpl {
 				                         +" Where 1=1 ";
         if(!CommonUtil.isNullOrEmpty(card.getUser().getEmail())) {
         	hql+=" AND  u.email=?";
-        	DataUtilStrParameter.add(card.getUser().getEmail());
+        	DataUtilParameter.add(card.getUser().getEmail());
         }
         if(!CommonUtil.isNullOrEmpty(card.getUser().getPin())) {
         	if (!UserValidity.checkPin(card.getUser().getPin()))  throw new UserNotValidPinException(card.getUser().getPin());  
         	hql+=" AND  u.pin=?";
-        	DataUtilStrParameter.add(card.getUser().getPin());
+        	DataUtilParameter.add(card.getUser().getPin());
         }
         if(!CommonUtil.isNullOrEmpty(card.getCard().getCode())) {
         	hql+=" AND  c.code=?";
-        	DataUtilStrParameter.add(card.getCard().getCode());
+        	DataUtilParameter.add(card.getCard().getCode());
         }
         if(!CommonUtil.isNull(card.getId()) && card.getId()!=0) {
         	hql=hql+" AND  uc.id=?";
-        	DataUtilStrParameter.add(card.getId());
+        	DataUtilParameter.add(card.getId());
         }
         /*if(!CommonUtil.isNull(card.getUser().getId()) && card.getUser().getId()!=0) {
         	hql=hql+" AND  u.id=?";
-        	DataUtilStrParameter.add(card.getUser().getId());
+        	DataUtilParameter.add(card.getUser().getId());
         }*/
         System.out.println("hql is "+hql);
         Query query = session.createQuery(hql);
-        DataUtilStrParameter.setParameter(query);
+        DataUtilParameter.setParameter(query);
        // query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
         //List list = query.list();
        // System.out.println("query is "+query);

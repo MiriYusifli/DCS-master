@@ -8,11 +8,11 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-public class DataUtilStrParameter {
+public class DataUtilParameter {
 
 	
 	
-	static List <String>  hbrParameterList=new ArrayList<>();
+	static List <Object>  hbrParameterList=new ArrayList<>();
 	public static void clean(){
 		hbrParameterList=new ArrayList<>();
 	}
@@ -27,8 +27,8 @@ public class DataUtilStrParameter {
 	public static void setParameter(Query query){
 		int i=0;
 		
-		for (String string : hbrParameterList) {
-			query.setParameter(i, string);
+		for (Object object : hbrParameterList) {
+			query.setParameter(i, object);
 			i++;
 		}
 	}

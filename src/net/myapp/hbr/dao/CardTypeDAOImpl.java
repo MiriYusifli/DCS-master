@@ -1,5 +1,7 @@
 package net.myapp.hbr.dao;
 
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -8,6 +10,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import net.myapp.dao.model.CardType;
+import net.myapp.dao.model.User;
 
 
 
@@ -45,6 +48,14 @@ public class CardTypeDAOImpl {
 		
 		return cardType;
 	}
+    @Transactional
+	public List<CardType> getAllCardType(){
+    	  Session session = this.sessionFactory.getCurrentSession();
+          List<CardType> list = session.createQuery("from CardType").list();
+          
+          return list;
+      
+		}
 
 	
 }

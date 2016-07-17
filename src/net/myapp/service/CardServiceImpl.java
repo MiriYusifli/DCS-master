@@ -10,7 +10,8 @@ import net.myapp.dao.model.Card;
 import net.myapp.dao.model.CardType;
 import net.myapp.hbr.dao.CardDAOImpl;
 import net.myapp.hbr.dao.CardTypeDAOImpl;
-import net.myapp.notification.CardNotifications;
+import net.myapp.helper.card.CardTypeUtil;
+import net.myapp.model.NextCardInfo;
 
 
 @Service
@@ -26,9 +27,9 @@ public class CardServiceImpl implements CardService {
 
 	
 	@Transactional
-	public void  PassNextCard(Card card){
+	public NextCardInfo  getNextCardInfo(Card card,CardTypeDAOImpl cardTypeDAOImpl){
 		
-		double balance=card.getUserCard().getBalance();
+		/*double balance=card.getUserCard().getBalance();
 		int cardType_id=card.getCardType().getId();
 		CardNotifications cardNotifications=new CardNotifications();
 		
@@ -46,8 +47,18 @@ public class CardServiceImpl implements CardService {
 		cardNotifications.PassNextCardBalanceMinus(String.valueOf(required_balance));
 		RequestHelper.setAttribute("MinusKey", cardNotifications.geti18nNotfMessageKey());
 		RequestHelper.setAttribute("MinusArg", cardNotifications.geti18nNotfMessageArg());
+		*/
+		CardTypeUtil cardTypeUtil=new CardTypeUtil(cardTypeDAOImpl);
+		CardType cardType=cardTypeUtil.getNextCardType(card.getCardType());
+		double needableAmountForPassing=card.getUserCard().getCard().getCardType().getPassing_amount()-card.getUserCard().getBalance();
+		//System.out.println();
+		NextCardInfo nextCard=new NextCardInfo(cardType.getName(),needableAmountForPassing );
+		return nextCard;
+		
 		
 	}
+
+
 	
 	
 	
