@@ -1,2 +1,2 @@
-1)ne vaxt bir classi extend edib 
+1)ne vaxt bir classi(model) extend edib 
 this. den ne vaxt istifade edim ?
