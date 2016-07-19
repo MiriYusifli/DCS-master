@@ -17,14 +17,6 @@ import net.myapp.model.NextCardInfo;
 @Service
 public class CardServiceImpl implements CardService {
 	
-	private CardTypeDAOImpl cardTypeDAO;
-	
-
-
-	public void setCardTypeDAO(CardTypeDAOImpl cardTypeDAO) {
-		this.cardTypeDAO = cardTypeDAO;
-	}
-
 	
 	@Transactional
 	public NextCardInfo  getNextCardInfo(Card card,CardTypeDAOImpl cardTypeDAOImpl){

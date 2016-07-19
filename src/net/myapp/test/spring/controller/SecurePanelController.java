@@ -1,6 +1,7 @@
 package net.myapp.test.spring.controller;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 import net.myapp.common.logging.impl.Log;
 import net.myapp.common.web.holders.RequestHelper;
@@ -32,7 +35,12 @@ import net.myapp.hbr.dao.UserDAOImpl;
 import net.myapp.helper.CommonUtil;
 import net.myapp.helper.SecureUserUtil;
 import net.myapp.helper.secure.Utils;
+import net.myapp.model.NextCardInfo;
+import net.myapp.model.UserInfo;
+import net.myapp.requestHelper.OrdersOfUserRequest;
+import net.myapp.requestHelper.UserInfoRequest;
 import net.myapp.service.CardService;
+import net.myapp.service.CardServiceImpl;
 import net.myapp.service.UserCardService;
 @Controller
 
@@ -73,7 +81,7 @@ public class SecurePanelController {
 	
 	@Autowired(required = true)
 	@Qualifier(value = "cardService")
-	private CardService cardService;
+	private CardServiceImpl cardService;
 	
 	
 	//// normal page passing to default/jsp folder page inside of main.jsp
@@ -255,11 +263,9 @@ for (UserCard userCard : user.getUserCardSet()) {
 	
 	
 	@RequestMapping(value = "user/panel", method = RequestMethod.GET)
-	public String page_panel(User user) {//burda  adi string goturek  user_card_id onda atdaki line silinecek
-		UserCard userCard=new UserCard();
-		Card card=new Card();
-		userCard.setUser(user);
-		userCard.setCard(card);
+	public String page_panel(UserCard userCard) {//burda  adi string goturek  user_card_id onda atdaki line silinecek
+		
+	
 		/*
 		 * 
 		 * 
@@ -274,11 +280,14 @@ for (UserCard userCard : user.getUserCardSet()) {
 
 			
 			List<Object[]> usercardList = userDAOImpl.getTestIntParam(userCard);
-			
 			UserCard foundUserCard=(UserCard) usercardList.get(0)[1];
 			
-			RequestHelper.setAttribute("User",usercardList);
+			RequestHelper.setAttribute("UserInfo",UserInfoRequest.UserMainInfo(usercardList));
+			RequestHelper.setAttribute("Orders", OrdersOfUserRequest.ordersOfUserList(usercardList));
+			
 			RequestHelper.setAttribute("NextCardInfo",cardService.getNextCardInfo(foundUserCard.getCard(),cardTypeDAOImpl));
+			
+			
 			
 			
 			

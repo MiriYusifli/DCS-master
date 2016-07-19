@@ -33,24 +33,23 @@
 		  <h1 style="position:absolute; left:50%;top:0%;">
 		  <spring:message code="title.account"/>
 	     </h1> 
- 
- <c:forEach items="${User}" var="data">    
+    
  
  <p id="info" style="position:absolute;top:15%;">      
- <spring:message code="user.name"/>: ${data[0].name}
+ <spring:message code="user.name"/>: ${UserInfo.name}
  <br>
- <spring:message code="cardType"/>:${data[6].name}
+ <spring:message code="cardType"/>:${UserInfo.cardType_name}
  <br>
-<spring:message code="validFrom"/>:${data[1].valid_from}  
+<spring:message code="validFrom"/>:${UserInfo.issueDate}  
  <br>
- <spring:message code="validTo"/>:${data[1].valid_to} 
+ <spring:message code="validTo"/>:${UserInfo.lastDate} 
  <br>
- <spring:message code="discount"/>:${data[6].discount}%
+ <spring:message code="discount"/>:${UserInfo.discount}%
 <br>
-<spring:message code="balance"/>: ${data[1].balance}    
+<spring:message code="balance"/>: ${UserInfo.balance}    
 <br>
 </p>
-</c:forEach>
+
 
 
 <div class="container" style="position:absolute;top:60%;">
@@ -70,7 +69,7 @@
     <tbody>
      <c:set var="count" value="0" scope="page" />
     
-     <c:forEach items="${User}" var="data">  
+     <c:forEach items="${Orders}" var="data">  
              
              <c:set var="count" value="${count + 1}" scope="page"/>
        
@@ -79,11 +78,11 @@
 		
 		<c:out value = "${count}"/>
 </td>
-        <td>${data[4].name}</td>
-        <td>${data[4].price}</td>
-        <td>${data[2].total_discount}</td>
-        <td>${data[2].userCard.card.cardType.name}</td>
-        <td>${data[2].otime}</td>
+        <td>${data.good}</td>
+        <td>${data.price}</td>
+        <td>${data.discount}</td>
+        <td>${data.cardType_name}</td>
+        <td>${data.date}</td>
       </tr>
       </c:forEach>
       
@@ -100,6 +99,8 @@
 	<spring:message code="canGetNewCard" arguments="${NextCardInfo.name}"/> 
 	</c:if> 
      <p>
+    
+    
     
     
     

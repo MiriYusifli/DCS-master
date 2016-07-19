@@ -128,7 +128,7 @@ public class UserDAOImpl {
         	hql=hql+" AND  uc.id=?";
         	DataUtilIntParameter.add(card.getId());
         }
-        if(!CommonUtil.isNull(card.getUser().getId()) && card.getUser().getId()!=0) {
+        if(!CommonUtil.isNull(card.getUser()) && !CommonUtil.isNull(card.getUser().getId()) && card.getUser().getId()!=0) {
         	hql=hql+" AND  u.id=?";
         	DataUtilIntParameter.add(card.getUser().getId());
         }
