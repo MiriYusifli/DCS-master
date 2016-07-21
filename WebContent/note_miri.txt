@@ -1,2 +1,3 @@
 1)ne vaxt bir classi(model) extend edib 
 this. den ne vaxt istifade edim ?
+this. den ne vaxt istifade edim ?
