@@ -4,6 +4,7 @@ public class NextCardInfo {
 String name;
 double needableAmountForPassing;
 boolean canGetNewCard=false;
+//Date   validTo;
 public NextCardInfo(String name, double needableAmountForPassing) {
 	super();
 	this.name = name;

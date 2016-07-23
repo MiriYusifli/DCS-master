@@ -105,8 +105,6 @@
         <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
     </beans:bean>
     
-    <beans:bean id="cardService" class="net.myapp.service.CardServiceImpl">
-    </beans:bean>
     
      <beans:bean id="userCardDAO" class="net.myapp.hbr.dao.UserCardDAOImpl">
         <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
@@ -124,7 +122,13 @@
      </beans:bean>
    
    
-   
+    
+    
+     <beans:bean id="secureUserDAO" class="net.myapp.dao.SecureUserDAOImpl">
+        <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+     </beans:bean>
+    
+    
    <beans:bean id="userCardService" class="net.myapp.service.UserCardServiceImpl">
         <beans:property name="userDAO" ref="userDAO" />
         <beans:property name="userCardDAO" ref="userCardDAO" />
@@ -134,11 +138,12 @@
     
     
     
-     
+    <beans:bean id="cardService" class="net.myapp.service.CardServiceImpl">
+          <beans:property name="cardTypeDAO" ref="cardTypeDAO" />
+    </beans:bean>
     
-     <beans:bean id="secureUserDAO" class="net.myapp.dao.SecureUserDAOImpl">
-        <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
-     </beans:bean>
+    
+    
     
     
      

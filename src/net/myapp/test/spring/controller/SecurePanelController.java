@@ -30,6 +30,7 @@ import net.myapp.form.model.CardSearchRequest;
 import net.myapp.form.model.CustomerAddRequest;
 import net.myapp.hbr.dao.CardDAOImpl;
 import net.myapp.hbr.dao.CardTypeDAOImpl;
+import net.myapp.hbr.dao.UserCardDAO;
 import net.myapp.hbr.dao.UserCardDAOImpl;
 import net.myapp.hbr.dao.UserDAOImpl;
 import net.myapp.helper.CommonUtil;
@@ -37,11 +38,10 @@ import net.myapp.helper.SecureUserUtil;
 import net.myapp.helper.secure.Utils;
 import net.myapp.model.NextCardInfo;
 import net.myapp.model.UserInfo;
-import net.myapp.requestHelper.OrdersOfUserRequest;
-import net.myapp.requestHelper.UserInfoRequest;
 import net.myapp.service.CardService;
 import net.myapp.service.CardServiceImpl;
 import net.myapp.service.UserCardService;
+import net.myapp.service.UserCardServiceImpl;
 @Controller
 
 public class SecurePanelController {
@@ -81,7 +81,7 @@ public class SecurePanelController {
 	
 	@Autowired(required = true)
 	@Qualifier(value = "cardService")
-	private CardServiceImpl cardService;
+	private CardService cardService;
 	
 	
 	//// normal page passing to default/jsp folder page inside of main.jsp
@@ -262,50 +262,13 @@ for (UserCard userCard : user.getUserCardSet()) {
 	
 	
 	
-	@RequestMapping(value = "user/panel", method = RequestMethod.GET)
-	public String page_panel(UserCard userCard) {//burda  adi string goturek  user_card_id onda atdaki line silinecek
-		
-	
-		/*
-		 * 
-		 * 
-		 * 
-		 * 1)burda report data(orders table olan melumati) ile bawda olan data-ni 2 ayri method alsaq ela olar mence hem readibility artar hemde rahatlawar kod
-		 * 2)cardService cardServiceImpl deyiwek uste basanda lazim olan yere aparsin bizi
-		 * 3)notification exception kimi yanawmisan amma orda daha rahat etmek olar 
-		 * 
-		 * 
-		 */
-		try {
-
-			
-			List<Object[]> usercardList = userDAOImpl.getTestIntParam(userCard);
-			UserCard foundUserCard=(UserCard) usercardList.get(0)[1];
-			
-			RequestHelper.setAttribute("UserInfo",UserInfoRequest.UserMainInfo(usercardList));
-			RequestHelper.setAttribute("Orders", OrdersOfUserRequest.ordersOfUserList(usercardList));
-			
-			RequestHelper.setAttribute("NextCardInfo",cardService.getNextCardInfo(foundUserCard.getCard(),cardTypeDAOImpl));
-			
-			
-			
-			
-			
-			
-			
-			
-				
-				
-		} catch (UserNotFoundException | UserNotValidPinException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-		
-		
-		
-	return "UserPanel";
+	@RequestMapping(value = "user/info", method = RequestMethod.GET)
+	public String page_user_info(int id) {//burda  adi string goturek  user_card_id onda atdaki line silinecek
+			UserCard userCard=userCardDAOImpl.getById(id);
+		    RequestHelper.setAttribute("UserInfo",userCard);
+			//RequestHelper.setAttribute("Orders", userCardDAOImpl.get);
+			RequestHelper.setAttribute("NextCardInfo",cardService.getNextCardInfo(userCard.getCard()));
+	return "UserInfo";
 	}
 	
 }

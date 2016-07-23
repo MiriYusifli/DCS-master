@@ -1,3 +1,11 @@
 1)ne vaxt bir classi(model) extend edib 
 this. den ne vaxt istifade edim ?
 this. den ne vaxt istifade edim ?
+
+
+
+//////////////
+okazivayetsya men sene yazmwidim haa orda interface yox
+CardServiceImpl yaz rahat olsun baxmaga onda problem cixir 
+ona gore rahat olmasa bele orda interface olmalidir
+onu deyiwdim

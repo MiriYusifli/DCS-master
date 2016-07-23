@@ -109,7 +109,7 @@ public class UserDAOImpl {
 		*/return list;
     }
     
-    
+    /*
     @Transactional
     public List<Object[]> getTestIntParam(UserCard card) throws UserNotFoundException, UserNotValidPinException {
         Session session = this.sessionFactory.getCurrentSession(); 
@@ -141,12 +141,12 @@ public class UserDAOImpl {
         List<Object[]> list = query.list();
         
         if (CommonUtil.isEmpty(list))  throw new UserNotFoundException("---");
-		/*for(Object[] arr : list){
+		for(Object[] arr : list){
 			UserCard userCard=(UserCard) arr[0];
 	     	Order order=(Order) arr[1];
 			System.out.println(userCard.getBalance()+"   "+order.getTotal_amount());
 		} 
-		*/return list;
+		return list;
     }
     
-}
+*/}

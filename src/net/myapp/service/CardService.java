@@ -5,7 +5,6 @@ import net.myapp.hbr.dao.CardTypeDAOImpl;
 import net.myapp.model.NextCardInfo;
 
 public interface CardService {
-	public NextCardInfo getNextCardInfo(Card card,CardTypeDAOImpl cardTypeDAOImpl);
-	CardServiceImpl cardServiceImpl=new CardServiceImpl();
+	public NextCardInfo getNextCardInfo(Card card);
 	
 }
