@@ -15,7 +15,7 @@ import net.myapp.dao.model.User;
 
 
 @Repository
-public class CardTypeDAOImpl {
+public class CardTypeDAOImpl implements CardTypeDAO{
 
 	private SessionFactory sessionFactory;
 	
@@ -25,7 +25,7 @@ public class CardTypeDAOImpl {
 	    }
 	
 	
-    @Transactional
+    
 	public CardType getByType(int type_id){
     	Session session = this.sessionFactory.getCurrentSession();      
         CardType p = (CardType) session.load(CardType.class, new Integer(type_id));
@@ -37,7 +37,7 @@ public class CardTypeDAOImpl {
 	}
     
     
-    @Transactional
+    
 	public CardType getTopCardType(){
     	Session session = this.sessionFactory.getCurrentSession();
 		Criteria cr = session.createCriteria(CardType.class);
@@ -48,7 +48,7 @@ public class CardTypeDAOImpl {
 		
 		return cardType;
 	}
-    @Transactional
+    
 	public List<CardType> getAllCardType(){
     	  Session session = this.sessionFactory.getCurrentSession();
           List<CardType> list = session.createQuery("from CardType").list();

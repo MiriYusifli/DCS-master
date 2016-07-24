@@ -27,8 +27,8 @@ public class MyException extends Exception {
 	public String getI18nErrorMessageArg() {
 		return i18nErrorMessageArg;
 	}
-	public void setI18nErrorMessageArg(String i18nErrorMessageArg) {
-		this.i18nErrorMessageArg = i18nErrorMessageArg;
+	public void setI18nErrorMessageArg(Object i18nErrorMessageArg) {
+		this.i18nErrorMessageArg =i18nErrorMessageArg.toString();
 	}
 	   
 	@Override

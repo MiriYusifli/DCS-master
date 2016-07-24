@@ -100,6 +100,9 @@
             </beans:props>
         </beans:property>
     </beans:bean>
+
+
+
      
     <beans:bean id="userDAO" class="net.myapp.hbr.dao.UserDAOImpl">
         <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
@@ -121,18 +124,26 @@
         <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
      </beans:bean>
    
-   
-    
-    
+      <beans:bean id="reportDAO" class="net.myapp.hbr.dao.ReportDAOImpl">
+        <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+     </beans:bean>
+
      <beans:bean id="secureUserDAO" class="net.myapp.dao.SecureUserDAOImpl">
         <beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
      </beans:bean>
-    
-    
+
+
+
+
+
+
+
+
    <beans:bean id="userCardService" class="net.myapp.service.UserCardServiceImpl">
         <beans:property name="userDAO" ref="userDAO" />
         <beans:property name="userCardDAO" ref="userCardDAO" />
         <beans:property name="cardDAO" ref="cardDAO" />
+        <beans:property name="reportDAO" ref="reportDAO" />
     </beans:bean>
     
     

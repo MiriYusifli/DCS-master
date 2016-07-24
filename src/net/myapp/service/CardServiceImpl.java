@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import net.myapp.common.web.holders.RequestHelper;
 import net.myapp.dao.model.Card;
 import net.myapp.dao.model.CardType;
+import net.myapp.dao.model.UserCard;
 import net.myapp.hbr.dao.CardDAOImpl;
 import net.myapp.hbr.dao.CardTypeDAOImpl;
 import net.myapp.helper.card.CardTypeUtil;
@@ -24,10 +25,10 @@ public class CardServiceImpl implements CardService {
 
 
 	@Transactional
-	public NextCardInfo  getNextCardInfo(Card card){
+	public NextCardInfo  getNextCardInfo(UserCard userCard){
 		CardTypeUtil cardTypeUtil=new CardTypeUtil(cardTypeDAO);
-		CardType cardType=cardTypeUtil.getNextCardType(card.getCardType());
-		double needableAmountForPassing=card.getUserCard().getCard().getCardType().getPassing_amount()-card.getUserCard().getBalance();
+		CardType cardType=cardTypeUtil.getNextCardType(userCard.getCard().getCardType());
+		double needableAmountForPassing=userCard.getCard().getUserCard().getCard().getCardType().getPassing_amount()-userCard.getCard().getUserCard().getBalance();
 		//System.out.println();
 		NextCardInfo nextCard=new NextCardInfo(cardType.getName(),needableAmountForPassing );
 		return nextCard;

@@ -24,7 +24,7 @@ private SessionFactory sessionFactory;
         session.persist(p);
   //      logger.info("Person saved successfully, Person Details="+p);
     }
-    @Transactional
+    
     public void update(UserCard p) {
         Session session = this.sessionFactory.getCurrentSession();
         session.update(p);
@@ -32,7 +32,7 @@ private SessionFactory sessionFactory;
     }
     
     
-    @Transactional
+    
     public UserCard getById(int id) {
         Session session = this.sessionFactory.getCurrentSession();      
         UserCard p = (UserCard) session.load(UserCard.class, new Integer(id));

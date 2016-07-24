@@ -18,20 +18,20 @@ import net.myapp.helper.dao.DataUtilParameter;
 import net.myapp.validity.user.UserValidity;
 
 @Repository
-public class UserDAOImpl {
+public class UserDAOImpl implements UserDAO{
     private SessionFactory sessionFactory;
     
     
     public void setSessionFactory(SessionFactory sf){
         this.sessionFactory = sf;
     }
- 
+    
     public void add(User p) {
         Session session = this.sessionFactory.getCurrentSession();
         session.persist(p);
   //      logger.info("Person saved successfully, Person Details="+p);
     }
-    @Transactional
+    
     public void update(User p) {
         Session session = this.sessionFactory.getCurrentSession();
         session.update(p);
@@ -44,7 +44,7 @@ public class UserDAOImpl {
         
         return list;
     }
-    @Transactional
+    
     public User getById(int id) {
         Session session = this.sessionFactory.getCurrentSession();      
         User p = (User) session.load(User.class, new Integer(id));
@@ -110,7 +110,7 @@ public class UserDAOImpl {
     }
     
     /*
-    @Transactional
+    
     public List<Object[]> getTestIntParam(UserCard card) throws UserNotFoundException, UserNotValidPinException {
         Session session = this.sessionFactory.getCurrentSession(); 
         

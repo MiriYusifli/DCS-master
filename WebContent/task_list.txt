@@ -1,3 +1,3 @@
-1)-define dao interface
-2)-write implementation for this interface
-3)-
+result of research
+1)ww must use impl class in spring config
+but in autowired use interface for normal workflow

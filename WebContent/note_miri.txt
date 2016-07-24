@@ -2,6 +2,7 @@
 this. den ne vaxt istifade edim ?
 this. den ne vaxt istifade edim ?
 
+this den hemin classin icinde instance variable muracietde istifade edilir
 
 
 //////////////
@@ -9,3 +10,62 @@ okazivayetsya men sene yazmwidim haa orda interface yox
 CardServiceImpl yaz rahat olsun baxmaga onda problem cixir 
 ona gore rahat olmasa bele orda interface olmalidir
 onu deyiwdim
+
+
+
+
+
+
+
+
+///////////////////////////////task sen edeceyin
+page order/add
+////////////////////////////////view bagli elave
+
+elave etmek ucun sifiariwi
+input bir line olsun her defe knopkaya basdiq latda
+melumat kimi table gelsin
+Example
+  saat-----2---50AZN---100/10   axirinda silme knopkasi olsun
+  saat-----2---50AZN---100/10   axirinda silme knopkasi olsun
+  saat-----2---50AZN---100/10   axirinda silme knopkasi olsun
+input type text bidene line olur her klik edende altdaki table boyuyur
+bunlari jquery et
+ve bunu json kimi gondersen ela olar orda tutarsan
+
+awagida ikidene radio button olsun(defaultla birinci secilmiw olsun)
+1) endirim deposite elave olunsun//ne endirim oldu user card deposite elave et
+2) endirim istifade olunsun// endirimi yerindece istifade edir uje deposit nece var ele qalir
+3) elave olaraq depositden istifade olunsun ____ .Hal hazirda depositde 35 Azn
+//bu endirimide istifade edir elave olaraq depositindende goturur
+
+
+/////////////////////////kodla bagli meslehetler
+
+useri goturmek ucun 
+userCardService.getUserCard
+
+teze bidene kod yaz
+ OrderService
+     add(OrderAddRequest input)//burdan altdakini invoke edirsen//userden gelendi bu
+     add(List<Good>  goodList,List<OrderDetail> odList,UserCard userCard,int sellerID)
+  
+OrderDAO.add
+OrderDetailDAO.add
+UserCardDAO.update//   balance ve discount update etmek ucun
+
+//////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+

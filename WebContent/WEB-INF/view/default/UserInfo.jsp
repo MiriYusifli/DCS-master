@@ -36,17 +36,17 @@
     
  
  <p id="info" style="position:absolute;top:15%;">      
- <spring:message code="user.name"/>: ${UserInfo.name}
+ <spring:message code="user.name"/>: ${UserCard.user.name}
  <br>
- <spring:message code="cardType"/>:${UserInfo.cardType_name}
+ <spring:message code="cardType"/>:${UserCard.card.cardType.name}
  <br>
-<spring:message code="validFrom"/>:${UserInfo.issueDate}  
+<spring:message code="validFrom"/>:${UserCard.valid_from}  
  <br>
- <spring:message code="validTo"/>:${UserInfo.lastDate} 
+ <spring:message code="validTo"/>:${UserCard.valid_to} 
  <br>
- <spring:message code="discount"/>:${UserInfo.discount}%
+ <spring:message code="discount"/>:${UserCard.discount}%
 <br>
-<spring:message code="balance"/>: ${UserInfo.balance}    
+<spring:message code="balance"/>: ${UserCard.balance}    
 <br>
 </p>
 
@@ -78,12 +78,12 @@
 		
 		<c:out value = "${count}"/>
 </td>
-        <td>${data.good}</td>
-        <td>${data.price}</td>
-        <td>${data.discount}</td>
-        <td>${data.cardType_name}</td>
-        <td>${data.date}</td>
-      </tr>
+        <td>${data[4].name}</td>
+        <td>${data[4].price}</td>
+        <td>xxxx</td>
+        <td>${data[6].name}</td>
+        <td>${data[2].odate}</td>
+       </tr>
       </c:forEach>
       
     </tbody>

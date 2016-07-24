@@ -10,7 +10,7 @@ import net.myapp.dao.model.Card;
 
 
 @Repository
-public class CardDAOImpl {
+public class CardDAOImpl implements CardDAO {
 
 	
 private SessionFactory sessionFactory;
@@ -20,13 +20,11 @@ private SessionFactory sessionFactory;
         this.sessionFactory = sf;
     }
  
-    @Transactional
     public void add(Card p) {
         Session session = this.sessionFactory.getCurrentSession();
         session.persist(p);
   //      logger.info("Person saved successfully, Person Details="+p);
     }
-    @Transactional
     public void update(Card p) {
         Session session = this.sessionFactory.getCurrentSession();
         session.update(p);
@@ -34,7 +32,7 @@ private SessionFactory sessionFactory;
     }
     
     
-    @Transactional
+    
     public Card getById(int id) {
         Session session = this.sessionFactory.getCurrentSession();      
         Card p = (Card) session.load(Card.class, new Integer(id));
@@ -44,7 +42,7 @@ private SessionFactory sessionFactory;
     
     
     
-    @Transactional
+    
     public Card getByCode(String code) {
         Session session = this.sessionFactory.getCurrentSession(); 
         

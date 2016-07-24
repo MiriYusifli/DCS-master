@@ -1,5 +1,6 @@
 package net.myapp.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,9 +10,17 @@ import net.myapp.dao.model.User;
 import net.myapp.dao.model.UserCard;
 import net.myapp.exception.card.CardNotFoundException;
 import net.myapp.exception.user.UserNotValidPinException;
+import net.myapp.exception.usercard.UserCardNotActiveException;
+import net.myapp.exception.usercard.UserCardNotFoundException;
+import net.myapp.exception.usercard.UserCardValidDateExpiredException;
 import net.myapp.form.model.CustomerAddRequest;
+import net.myapp.hbr.dao.CardDAO;
 import net.myapp.hbr.dao.CardDAOImpl;
+import net.myapp.hbr.dao.ReportDAO;
+import net.myapp.hbr.dao.ReportDAOImpl;
+import net.myapp.hbr.dao.UserCardDAO;
 import net.myapp.hbr.dao.UserCardDAOImpl;
+import net.myapp.hbr.dao.UserDAO;
 import net.myapp.hbr.dao.UserDAOImpl;
 import net.myapp.helper.DateUtil;
 import net.myapp.validity.user.UserValidity;
@@ -19,21 +28,29 @@ import net.myapp.validity.user.UserValidity;
 @Service
 public class UserCardServiceImpl implements UserCardService{
 
+	private UserDAO userDAO;
+	private UserCardDAO userCardDAO;
+	private CardDAO cardDAO;
+	private ReportDAO reportDAO;
 	
-	private UserDAOImpl userDAO;
-	private UserCardDAOImpl userCardDAO;
-	private CardDAOImpl cardDAO;
+	
+	
 
-	public void setUserDAO(UserDAOImpl userDAO) {
+
+	public void setUserDAO(UserDAO userDAO) {
 		this.userDAO = userDAO;
 	}
 
-	public void setUserCardDAO(UserCardDAOImpl userCardDAO) {
+	public void setUserCardDAO(UserCardDAO userCardDAO) {
 		this.userCardDAO = userCardDAO;
 	}
 
-	public void setCardDAO(CardDAOImpl cardDAO) {
+	public void setCardDAO(CardDAO cardDAO) {
 		this.cardDAO = cardDAO;
+	}
+
+	public void setReportDAO(ReportDAO reportDAO) {
+		this.reportDAO = reportDAO;
 	}
 
 	@Override
@@ -44,6 +61,7 @@ public class UserCardServiceImpl implements UserCardService{
 	}
 
 	@Override
+	@Transactional
 	public void add(CustomerAddRequest input) throws UserNotValidPinException, CardNotFoundException {
 		
 		
@@ -87,6 +105,12 @@ public class UserCardServiceImpl implements UserCardService{
 		this.add(userCard);
 		
 		
+	}
+
+	@Override
+	@Transactional
+	public UserCard getUserCard(int userCardID) throws UserCardNotFoundException, UserCardNotActiveException, UserCardValidDateExpiredException {
+		return reportDAO.getUserCard(userCardID);
 	}
 	
 	

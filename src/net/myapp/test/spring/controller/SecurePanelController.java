@@ -1,7 +1,6 @@
 package net.myapp.test.spring.controller;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
-
 import net.myapp.common.logging.impl.Log;
 import net.myapp.common.web.holders.RequestHelper;
 import net.myapp.common.web.holders.WebAuthHelper;
 import net.myapp.common.web.holders.WebSessionHelper;
 import net.myapp.dao.SecureUserDAO;
+import net.myapp.dao.SecureUserDAOImpl;
 import net.myapp.dao.model.Card;
 import net.myapp.dao.model.SecureUser;
 import net.myapp.dao.model.User;
@@ -26,20 +24,25 @@ import net.myapp.dao.model.UserCard;
 import net.myapp.exception.card.CardNotFoundException;
 import net.myapp.exception.user.UserNotFoundException;
 import net.myapp.exception.user.UserNotValidPinException;
+import net.myapp.exception.usercard.UserCardNotActiveException;
+import net.myapp.exception.usercard.UserCardNotFoundException;
+import net.myapp.exception.usercard.UserCardValidDateExpiredException;
 import net.myapp.form.model.CardSearchRequest;
 import net.myapp.form.model.CustomerAddRequest;
+import net.myapp.hbr.dao.CardDAO;
 import net.myapp.hbr.dao.CardDAOImpl;
+import net.myapp.hbr.dao.CardTypeDAO;
 import net.myapp.hbr.dao.CardTypeDAOImpl;
+import net.myapp.hbr.dao.ReportDAO;
+import net.myapp.hbr.dao.ReportDAOImpl;
 import net.myapp.hbr.dao.UserCardDAO;
 import net.myapp.hbr.dao.UserCardDAOImpl;
+import net.myapp.hbr.dao.UserDAO;
 import net.myapp.hbr.dao.UserDAOImpl;
 import net.myapp.helper.CommonUtil;
 import net.myapp.helper.SecureUserUtil;
 import net.myapp.helper.secure.Utils;
-import net.myapp.model.NextCardInfo;
-import net.myapp.model.UserInfo;
 import net.myapp.service.CardService;
-import net.myapp.service.CardServiceImpl;
 import net.myapp.service.UserCardService;
 import net.myapp.service.UserCardServiceImpl;
 @Controller
@@ -53,28 +56,34 @@ public class SecurePanelController {
 	@Qualifier(value = "secureUserDAO")
 	private SecureUserDAO secureUserDAO;
 
-
-	
-
-	@Autowired(required = true)
+    @Autowired(required = true)
 	@Qualifier(value = "userDAO")
-	private UserDAOImpl userDAOImpl;
-	
+	private UserDAO userDAO;
+    
+	@Autowired(required = true)
+	@Qualifier(value = "reportDAO")
+	private ReportDAO reportDAO;
+
+    /*
 	@Autowired(required = true)
 	@Qualifier(value = "cardDAO")
-	private CardDAOImpl cardDAOImpl;
+	private CardDAO cardDAO;
 	
 	
 	@Autowired(required = true)
 	@Qualifier(value = "cardTypeDAO")
-	private CardTypeDAOImpl cardTypeDAOImpl;
+	private CardTypeDAO cardTypeDAO;
 	
 	@Autowired(required = true)
 	@Qualifier(value = "userCardDAO")
-	private UserCardDAOImpl userCardDAOImpl;
+	private UserCardDAO userCardDAO;
 	
-
-	@Autowired(required = true)
+*/
+	
+	
+	
+	
+	@Autowired
 	@Qualifier(value = "userCardService")
 	private UserCardService userCardService;
 	
@@ -127,62 +136,7 @@ public class SecurePanelController {
 		WebSessionHelper.clearSessionData();
 		return "login";
 	}
-	@RequestMapping(value = "test", method = RequestMethod.GET)
-	public String printHello4() {
 		
-		
-		for (UserCard userCard : userDAOImpl.getById(1).getUserCardSet())
-			try {
-				{
-
-					/*System.out.println("user balance : "+userCard.getBalance());
-					System.out.println("seller name : "+userCard.getSeller().getName());
-					System.out.println("card code :"+userCard.getCard().getCode());
-					System.out.println("card type :"+userCard.getCard().getCardType().getName());
-					*/
-					
-					RequestHelper.setAttribute("UserCard",userCard);
-					
-					List<Object[]> list;
-					try {
-						list = userDAOImpl.getTest(userCard);
-						RequestHelper.setAttribute("Report",list);
-						
-					} catch (UserNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					/*System.out.println("*()");
-						for (Object[] objects : list) {
-						System.out.println(objects[0].toString());
-				        System.out.println(objects[1].toString());
-				        System.out.println(objects[2].toString());
-				        System.out.println(objects[3].toString());
-				        System.out.println(objects[4].toString());
-				        System.out.println(objects[5].toString());
-				        System.out.println(objects[6].toString());
-
-					}*/
-				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		return "test";
-	}
-
-	
-	@RequestMapping(value = "test1", method = RequestMethod.GET)
-	public String printHello5() {
-	User user=userDAOImpl.getById(1);
-	System.out.println("user is "+user.getName());
-for (UserCard userCard : user.getUserCardSet()) {
-	System.out.println(userCard.getBalance());
-}		
-	return "test";
-	}
-	
-	
 	@RequestMapping(value = "card/search", method = RequestMethod.GET)
 	public String index_CardSearch(CardSearchRequest input) {
 	UserCard userCard=new UserCard();
@@ -199,7 +153,7 @@ for (UserCard userCard : user.getUserCardSet()) {
 	userCard.setCard(card);
 	
 	try {
-		List<Object[]> usercardList = userDAOImpl.getTest(userCard);
+		List<Object[]> usercardList = userDAO.getTest(userCard);
 		User foundUser=(User) usercardList.get(0)[0];
 		RequestHelper.setAttribute("User",foundUser);
 		
@@ -231,6 +185,24 @@ for (UserCard userCard : user.getUserCardSet()) {
 	}
 	
 	
+
+	@RequestMapping(value = "user/info", method = RequestMethod.GET)
+	public String page_user_info(int id) {//burda  adi string goturek  user_card_id onda atdaki line silinecek
+			UserCard userCard;
+			try {
+				userCard = userCardService.getUserCard(id);
+				RequestHelper.setAttribute("UserCard",userCard);
+				RequestHelper.setAttribute("Orders", reportDAO.getUserOrders(id));
+				RequestHelper.setAttribute("NextCardInfo",cardService.getNextCardInfo(userCard));
+				
+			} catch (UserCardNotFoundException | UserCardNotActiveException | UserCardValidDateExpiredException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				//e.addErrorKeyArgToRequestHelper();
+			}
+			
+	return "UserInfo";
+	}
 	
 	
 	
@@ -261,14 +233,5 @@ for (UserCard userCard : user.getUserCardSet()) {
 	}
 	
 	
-	
-	@RequestMapping(value = "user/info", method = RequestMethod.GET)
-	public String page_user_info(int id) {//burda  adi string goturek  user_card_id onda atdaki line silinecek
-			UserCard userCard=userCardDAOImpl.getById(id);
-		    RequestHelper.setAttribute("UserInfo",userCard);
-			//RequestHelper.setAttribute("Orders", userCardDAOImpl.get);
-			RequestHelper.setAttribute("NextCardInfo",cardService.getNextCardInfo(userCard.getCard()));
-	return "UserInfo";
-	}
 	
 }
