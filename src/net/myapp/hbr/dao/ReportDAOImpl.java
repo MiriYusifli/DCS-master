@@ -64,6 +64,7 @@ private SessionFactory sessionFactory;
 		UserCard userCard=null;
 		List<UserCard> userCardList=new ArrayList<>();
 		List<Object[]> objList=query.list();
+		System.out.println("i am here");
         for (Object[] obj: objList ) { userCardList.add((UserCard) obj[0]);}
 		if (userCardList.isEmpty())  throw new UserCardNotFoundException(userCardID);
         for (UserCard uc : userCardList) {
@@ -71,6 +72,7 @@ private SessionFactory sessionFactory;
 		}
         if (userCard==null)  throw new UserCardNotActiveException(userCardID);
 		if (userCard.getValid_to().before(new Date()))  throw new UserCardValidDateExpiredException(userCard.getValid_to());
+
 		return userCard;
 	}
 	

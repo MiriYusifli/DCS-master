@@ -1,7 +1,9 @@
 package net.myapp.test.spring.controller;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -190,9 +192,14 @@ public class SecurePanelController {
 	public String page_user_info(int id) {//burda  adi string goturek  user_card_id onda atdaki line silinecek
 			UserCard userCard;
 			try {
+				System.out.println("sql1");
 				userCard = userCardService.getUserCard(id);
 				RequestHelper.setAttribute("UserCard",userCard);
+				System.out.println("sql2");
+				
 				RequestHelper.setAttribute("Orders", reportDAO.getUserOrders(id));
+				System.out.println("sql3");
+				
 				RequestHelper.setAttribute("NextCardInfo",cardService.getNextCardInfo(userCard));
 				
 			} catch (UserCardNotFoundException | UserCardNotActiveException | UserCardValidDateExpiredException e) {
@@ -207,7 +214,28 @@ public class SecurePanelController {
 	
 	
 	
-	
+	@RequestMapping(value = "tag", method = RequestMethod.GET)
+	public String page_tag() {
+		
+		Map<String,String>  map=new HashMap<>();
+		map.put("0", "test0");
+		map.put("1", "test1");
+		map.put("2", "test2");
+		RequestHelper.setAttribute("Filtr","2");
+		RequestHelper.setAttribute("Map",map);
+		
+		
+		try {
+			throw new UserNotFoundException("fuad");
+		} catch (UserNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			//e.setI18nErrorMessageArg(null);
+			e.addErrorKeyArgToRequestHelper();
+		}
+		
+	return "tagTest";
+	}
 	
 	
 	

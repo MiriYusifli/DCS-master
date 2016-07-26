@@ -1,3 +1,6 @@
 result of research
-1)ww must use impl class in spring config
+-ww must use impl class in spring config
 but in autowired use interface for normal workflow
+
+-for tag files
+https://nikojava.wordpress.com/2009/01/12/jsp-custom-tags-part1-create-tag-file/

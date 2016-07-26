@@ -1,3 +1,5 @@
 eclipse.preferences.version=1
+encoding//WebContent/WEB-INF/tags/selectedOption.tag=UTF-8
 encoding//WebContent/WEB-INF/view/default/UserInfo.jsp=UTF-8
+encoding//WebContent/WEB-INF/view/default/tagTest.jsp=UTF-8
 encoding/<project>=UTF-8
