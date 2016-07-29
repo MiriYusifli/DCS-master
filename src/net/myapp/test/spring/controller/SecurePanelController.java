@@ -1,15 +1,26 @@
 package net.myapp.test.spring.controller;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
+import javax.servlet.http.HttpSession;
+
+import org.aspectj.weaver.ast.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.myapp.common.logging.impl.Log;
 import net.myapp.common.web.holders.RequestHelper;
@@ -18,6 +29,9 @@ import net.myapp.common.web.holders.WebSessionHelper;
 import net.myapp.dao.SecureUserDAO;
 import net.myapp.dao.SecureUserDAOImpl;
 import net.myapp.dao.model.Card;
+import net.myapp.dao.model.Good;
+import net.myapp.dao.model.Order;
+import net.myapp.dao.model.OrderDetail;
 import net.myapp.dao.model.SecureUser;
 import net.myapp.dao.model.User;
 import net.myapp.dao.model.UserCard;
@@ -29,6 +43,7 @@ import net.myapp.exception.usercard.UserCardNotFoundException;
 import net.myapp.exception.usercard.UserCardValidDateExpiredException;
 import net.myapp.form.model.CardSearchRequest;
 import net.myapp.form.model.CustomerAddRequest;
+import net.myapp.form.model.OrderAddRequest;
 import net.myapp.hbr.dao.CardDAO;
 import net.myapp.hbr.dao.CardDAOImpl;
 import net.myapp.hbr.dao.CardTypeDAO;
@@ -43,6 +58,7 @@ import net.myapp.helper.CommonUtil;
 import net.myapp.helper.SecureUserUtil;
 import net.myapp.helper.secure.Utils;
 import net.myapp.service.CardService;
+import net.myapp.service.OrderService;
 import net.myapp.service.UserCardService;
 import net.myapp.service.UserCardServiceImpl;
 @Controller
@@ -86,6 +102,11 @@ public class SecurePanelController {
 	@Autowired
 	@Qualifier(value = "userCardService")
 	private UserCardService userCardService;
+	
+	
+	@Autowired
+	@Qualifier(value = "orderService")
+	private OrderService orderService;
 	
 	
 	@Autowired(required = true)
@@ -219,12 +240,74 @@ public class SecurePanelController {
 	
 	
 	@RequestMapping(value = "new_order", method = RequestMethod.GET)
-	public String printHello7(@RequestParam(defaultValue = "null") String user_id) {
-	User user=new User();
+	public String printHello7(OrderAddRequest orderAddRequest,String userCard_id) {
+		if(!CommonUtil.isNullOrEmpty(userCard_id)){
+			UserCard userCard;
+			try {
+				userCard = userCardService.getUserCard(Integer.valueOf(userCard_id));
+				RequestHelper.setAttribute("Usercard",userCard);
+				
+				
+				
+				/*if(orderAddRequest.isNotNullSubmitOk()){
+				
+				OrderDetail orderDetail=new OrderDetail();
+				Good good=new Good();
+				orderDetail.setGcount(orderAddRequest.getGcount());
+				good.setId(orderAddRequest.getGood_id());
+				orderDetail.setGood(good);
+				Set<OrderDetail> odList=new  HashSet<>();
+				odList.add(orderDetail);
+				
+				
+				
+				orderService.add(odList, userCard, 1);
+				
+				}
+				
+				*/
+			} catch (NumberFormatException | UserCardNotFoundException | UserCardNotActiveException
+					| UserCardValidDateExpiredException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		
+		}
+		
+	
+		
+					
+			
+			
+			
+		
+		
+		
+		
 		
 		
 	return "new_order";
 	}
+	
+	
+	
+	
+	@ResponseBody
+	@RequestMapping(value="/create_persons", method=RequestMethod.POST)
+	public  void createPerson(@RequestBody OrderAddRequest[] orderAddRequest ){
+	//here you can persons array as normal
+	System.out.println("begin");
+		for (int i = 0; i < orderAddRequest.length; i++) {
+			System.out.println("order is "+orderAddRequest[i].getGood_id());
+		}
+		
+		
+	}
+	
+	
+	
 	//branch m_11_07
 	@RequestMapping(value = "new_card", method = RequestMethod.GET)
 	public String printHello8(@RequestParam(defaultValue = "null") String user_id) {
