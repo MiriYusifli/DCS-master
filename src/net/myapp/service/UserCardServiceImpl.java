@@ -14,6 +14,7 @@ import net.myapp.exception.usercard.UserCardNotActiveException;
 import net.myapp.exception.usercard.UserCardNotFoundException;
 import net.myapp.exception.usercard.UserCardValidDateExpiredException;
 import net.myapp.form.model.CustomerAddRequest;
+import net.myapp.form.model.PayOrdersRequest;
 import net.myapp.hbr.dao.CardDAO;
 import net.myapp.hbr.dao.CardDAOImpl;
 import net.myapp.hbr.dao.ReportDAO;
@@ -112,6 +113,38 @@ public class UserCardServiceImpl implements UserCardService{
 	public UserCard getUserCard(int userCardID) throws UserCardNotFoundException, UserCardNotActiveException, UserCardValidDateExpiredException {
 		return reportDAO.getUserCard(userCardID);
 	}
+
+	@Override
+	public UserCard payOrders(PayOrdersRequest payOrdersRequest,double c) {
+		// c musterinin depozitden ne qeder istifade etmek istediyini gosterir
+		UserCard userCard=payOrdersRequest.getUserCard();
+		double discount=userCard.getDiscount();
+		double payment_price=payOrdersRequest.getPayment_price();
+		switch (payOrdersRequest.getPayment_option()) {
+		
+		case 1:discount=discount+payOrdersRequest.getPayment_discount();
+			  
+			break;
+		case 2:payment_price=payment_price-payOrdersRequest.getPayment_discount();
+				
+			break;
+		case 3:payment_price=payment_price-payOrdersRequest.getPayment_discount()-c;
+				discount=discount-c;
+	
+			break;
+
+		default:
+			break;
+		}
+		userCard.setBalance(userCard.getBalance()-payment_price);
+		userCard.setDiscount(discount);
+		 
+		userCardDAO.update(userCard);
+		
+		return userCard;
+		}
+		
+	}
 	
 	
 		
@@ -119,4 +152,4 @@ public class UserCardServiceImpl implements UserCardService{
 		
 	
 
-}
+

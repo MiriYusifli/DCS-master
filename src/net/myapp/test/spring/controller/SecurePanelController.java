@@ -1,6 +1,7 @@
 package net.myapp.test.spring.controller;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -44,6 +45,7 @@ import net.myapp.exception.usercard.UserCardValidDateExpiredException;
 import net.myapp.form.model.CardSearchRequest;
 import net.myapp.form.model.CustomerAddRequest;
 import net.myapp.form.model.OrderAddRequest;
+import net.myapp.form.model.PayOrdersRequest;
 import net.myapp.hbr.dao.CardDAO;
 import net.myapp.hbr.dao.CardDAOImpl;
 import net.myapp.hbr.dao.CardTypeDAO;
@@ -59,6 +61,7 @@ import net.myapp.helper.SecureUserUtil;
 import net.myapp.helper.secure.Utils;
 import net.myapp.service.CardService;
 import net.myapp.service.OrderService;
+import net.myapp.service.OrderServiceImpl;
 import net.myapp.service.UserCardService;
 import net.myapp.service.UserCardServiceImpl;
 @Controller
@@ -240,32 +243,56 @@ public class SecurePanelController {
 	
 	
 	@RequestMapping(value = "new_order", method = RequestMethod.GET)
-	public String printHello7(OrderAddRequest orderAddRequest,String userCard_id) {
+	public String printHello7(/*OrderAddRequest orderAddRequest,*/String userCard_id,PayOrdersRequest payOrdersRequest) {
 		if(!CommonUtil.isNullOrEmpty(userCard_id)){
 			UserCard userCard;
 			try {
 				userCard = userCardService.getUserCard(Integer.valueOf(userCard_id));
+				
 				RequestHelper.setAttribute("Usercard",userCard);
 				
 				
+				//Json list kimi alsa list array kimi alsa array
+				List<OrderAddRequest>orderRequestList=new ArrayList<>();
+				OrderAddRequest orderAddRequest1=new OrderAddRequest(1,3);
+				OrderAddRequest orderAddRequest2=new OrderAddRequest(2, 10);
+				orderRequestList.add(orderAddRequest1);
+				orderRequestList.add(orderAddRequest2);
+				//test json aldiqdan sonra asagidaki kimi gedir 
 				
-				/*if(orderAddRequest.isNotNullSubmitOk()){
-				
-				OrderDetail orderDetail=new OrderDetail();
-				Good good=new Good();
-				orderDetail.setGcount(orderAddRequest.getGcount());
-				good.setId(orderAddRequest.getGood_id());
-				orderDetail.setGood(good);
-				Set<OrderDetail> odList=new  HashSet<>();
-				odList.add(orderDetail);
-				
+				payOrdersRequest.setUserCard(userCard);
 				
 				
-				orderService.add(odList, userCard, 1);
+				Set<OrderDetail>orderDetailList=new HashSet();
+				Order order=new Order();
 				
+				
+				
+				for (int i = 0; i < orderRequestList.size(); i++) {
+					
+					OrderDetail orderDetail=new OrderDetail();
+					Good good=new Good();
+					good.setId(orderRequestList.get(i).getGood_id());
+					
+					orderDetail.setGood(good);
+					orderDetail.setGcount(orderRequestList.get(i).getGcount());
+					orderDetail.setOrder(order);
+
+					orderDetailList.add(orderDetail);
+				
+					
 				}
 				
-				*/
+				
+				
+				
+				
+				//1 seller id di test ucun
+				orderService.add(orderDetailList,1,payOrdersRequest);
+				
+				
+				
+				
 			} catch (NumberFormatException | UserCardNotFoundException | UserCardNotActiveException
 					| UserCardValidDateExpiredException e) {
 				// TODO Auto-generated catch block

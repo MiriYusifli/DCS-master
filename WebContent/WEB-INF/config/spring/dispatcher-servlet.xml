@@ -140,6 +140,7 @@
 	<beans:bean id="orderService" class="net.myapp.service.OrderServiceImpl">
         <beans:property name="orderDAO" ref="orderDAO" />
          <beans:property name="orderDetailDAO" ref="orderDetailDAO" />
+           <beans:property name="userCardService" ref="userCardService" />
      </beans:bean>
 
 

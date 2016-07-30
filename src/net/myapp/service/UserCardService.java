@@ -7,9 +7,12 @@ import net.myapp.exception.usercard.UserCardNotActiveException;
 import net.myapp.exception.usercard.UserCardNotFoundException;
 import net.myapp.exception.usercard.UserCardValidDateExpiredException;
 import net.myapp.form.model.CustomerAddRequest;
+import net.myapp.form.model.PayOrdersRequest;
 
 public interface UserCardService {
   public void add(UserCard userCard);
   public void add(CustomerAddRequest input) throws UserNotValidPinException, CardNotFoundException;
   public UserCard   getUserCard(int userCardID) throws UserCardNotFoundException, UserCardNotActiveException, UserCardValidDateExpiredException;
+  public UserCard payOrders(PayOrdersRequest payOrdersRequest,double c);
+
 }
