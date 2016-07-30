@@ -65,28 +65,28 @@
             
              <div class="form-group">
       <div class="col-xs-2">
-        <label for="ex1">Mehsul</label>
+        <label for="ex1"><spring:message code="good"/></label>
         <input class="form-control" id="good" type="text"  name="good_id">
         
       </div></div>
       
       <div class="form-group">
       <div class="col-xs-2">
-        <label for="ex1">Sayi</label>
+        <label for="ex1"><spring:message code="count"/></label>
         <input class="form-control" id="gcount" type="text"  name="gcount">
         
       </div></div>
       
       <div class="form-group">
       <div class="col-xs-2">
-        <label for="ex1">Qiymeti</label>
+        <label for="ex1"><spring:message code="price"/></label>
         <input class="form-control" id="price" type="text"  name="price">
         
       </div></div>
 	
 		<input type="hidden" value="${Usercard.id}" name="userCard_id">
 	
-		   <button type="button" class="btn btn-default" id="add"  style="position:absolute; left:75%;top:45%;">Elave et</button>
+		   <button type="button" class="btn btn-default" id="add"  style="position:absolute; left:75%;top:45%;"><spring:message code="add"/></button>
 	
 			
               
@@ -108,7 +108,7 @@
  			  <input type="hidden" id="payment_price" name="payment_price">
               		<input type="hidden" value="${Usercard.id}" name="userCard_id">
               
-              	<button type="submit" class="btn btn-default" id="ok" value="add" name="ok" style="position:absolute; left:75%;top:125%;">Bitir</button>
+              	<button type="submit" class="btn btn-default" id="ok" value="<spring:message code="add"/>" name="ok" style="position:absolute; left:75%;top:125%;">Bitir</button>
               
               
             </form>
@@ -116,10 +116,10 @@
             <table class="table table-bordered" id="myTable" style="position:absolute;top:35000%;"> 
     <thead>
       <tr>
-        <th>Good</th>
-        <th>Count</th>
-        <th>Price</th>
-         <th>Price/Discount</th>
+        <th><spring:message code="good"/></th>
+        <th><spring:message code="count"/></th>
+        <th><spring:message code="price"/></th>
+         <th><spring:message code="price"/>/<spring:message code="discount"/></th>
       </tr>
     </thead>
     <tbody>
@@ -288,10 +288,10 @@ var lastRow = table.insertRow(rows.length);
 		var cell2 = lastRow.insertCell(2);
 		var cell3=  lastRow.insertCell(3);
 		
-		cell0.innerHTML ="umumi:"
-		cell1.innerHTML ="qiymet:"+total_price;
- 	    cell2.innerHTML ="endirim:"+(total_price-total_discount_price);
-		cell3.innerHTML ="endirimli qiymet:"+total_discount_price;
+		cell0.innerHTML ="<spring:message code="result"/>:"
+		cell1.innerHTML ="<spring:message code="price"/>:"+total_price;
+ 	    cell2.innerHTML ="<spring:message code="discount"/>:"+(total_price-total_discount_price);
+		cell3.innerHTML ="<spring:message code="discount"/> <spring:message code="price"/>:"+total_discount_price;
 		
 		
 
