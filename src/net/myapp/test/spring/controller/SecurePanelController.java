@@ -1,17 +1,27 @@
 package net.myapp.test.spring.controller;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import javax.servlet.http.HttpSession;
+
+import org.aspectj.weaver.ast.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.myapp.common.logging.impl.Log;
 import net.myapp.common.web.holders.RequestHelper;
@@ -20,6 +30,9 @@ import net.myapp.common.web.holders.WebSessionHelper;
 import net.myapp.dao.SecureUserDAO;
 import net.myapp.dao.SecureUserDAOImpl;
 import net.myapp.dao.model.Card;
+import net.myapp.dao.model.Good;
+import net.myapp.dao.model.Order;
+import net.myapp.dao.model.OrderDetail;
 import net.myapp.dao.model.SecureUser;
 import net.myapp.dao.model.User;
 import net.myapp.dao.model.UserCard;
@@ -31,6 +44,8 @@ import net.myapp.exception.usercard.UserCardNotFoundException;
 import net.myapp.exception.usercard.UserCardValidDateExpiredException;
 import net.myapp.form.model.CardSearchRequest;
 import net.myapp.form.model.CustomerAddRequest;
+import net.myapp.form.model.OrderAddRequest;
+import net.myapp.form.model.PayOrdersRequest;
 import net.myapp.hbr.dao.CardDAO;
 import net.myapp.hbr.dao.CardDAOImpl;
 import net.myapp.hbr.dao.CardTypeDAO;
@@ -45,6 +60,8 @@ import net.myapp.helper.CommonUtil;
 import net.myapp.helper.SecureUserUtil;
 import net.myapp.helper.secure.Utils;
 import net.myapp.service.CardService;
+import net.myapp.service.OrderService;
+import net.myapp.service.OrderServiceImpl;
 import net.myapp.service.UserCardService;
 import net.myapp.service.UserCardServiceImpl;
 @Controller
@@ -88,6 +105,11 @@ public class SecurePanelController {
 	@Autowired
 	@Qualifier(value = "userCardService")
 	private UserCardService userCardService;
+	
+	
+	@Autowired
+	@Qualifier(value = "orderService")
+	private OrderService orderService;
 	
 	
 	@Autowired(required = true)
@@ -247,12 +269,98 @@ public class SecurePanelController {
 	
 	
 	@RequestMapping(value = "new_order", method = RequestMethod.GET)
-	public String printHello7(@RequestParam(defaultValue = "null") String user_id) {
-	User user=new User();
+	public String printHello7(/*OrderAddRequest orderAddRequest,*/String userCard_id,PayOrdersRequest payOrdersRequest) {
+		if(!CommonUtil.isNullOrEmpty(userCard_id)){
+			UserCard userCard;
+			try {
+				userCard = userCardService.getUserCard(Integer.valueOf(userCard_id));
+				
+				RequestHelper.setAttribute("Usercard",userCard);
+				
+				
+				//Json list kimi alsa list array kimi alsa array
+				List<OrderAddRequest>orderRequestList=new ArrayList<>();
+				OrderAddRequest orderAddRequest1=new OrderAddRequest(1,3);
+				OrderAddRequest orderAddRequest2=new OrderAddRequest(2, 10);
+				orderRequestList.add(orderAddRequest1);
+				orderRequestList.add(orderAddRequest2);
+				//test json aldiqdan sonra asagidaki kimi gedir 
+				
+				payOrdersRequest.setUserCard(userCard);
+				
+				
+				Set<OrderDetail>orderDetailList=new HashSet();
+				Order order=new Order();
+				
+				
+				
+				for (int i = 0; i < orderRequestList.size(); i++) {
+					
+					OrderDetail orderDetail=new OrderDetail();
+					Good good=new Good();
+					good.setId(orderRequestList.get(i).getGood_id());
+					
+					orderDetail.setGood(good);
+					orderDetail.setGcount(orderRequestList.get(i).getGcount());
+					orderDetail.setOrder(order);
+
+					orderDetailList.add(orderDetail);
+				
+					
+				}
+				
+				
+				
+				
+				
+				//1 seller id di test ucun
+				orderService.add(orderDetailList,1,payOrdersRequest);
+				
+				
+				
+				
+			} catch (NumberFormatException | UserCardNotFoundException | UserCardNotActiveException
+					| UserCardValidDateExpiredException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		
+		}
+		
+	
+		
+					
+			
+			
+			
+		
+		
+		
+		
 		
 		
 	return "new_order";
 	}
+	
+	
+	
+	
+	@ResponseBody
+	@RequestMapping(value="/create_persons", method=RequestMethod.POST)
+	public  void createPerson(@RequestBody OrderAddRequest[] orderAddRequest ){
+	//here you can persons array as normal
+	System.out.println("begin");
+		for (int i = 0; i < orderAddRequest.length; i++) {
+			System.out.println("order is "+orderAddRequest[i].getGood_id());
+		}
+		
+		
+	}
+	
+	
+	
 	//branch m_11_07
 	@RequestMapping(value = "new_card", method = RequestMethod.GET)
 	public String printHello8(@RequestParam(defaultValue = "null") String user_id) {

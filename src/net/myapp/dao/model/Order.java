@@ -35,6 +35,12 @@ SecureUser secureUser;
 @JoinColumn(name = "user_card_id", nullable = true)
 UserCard userCard;
 
+public Set<OrderDetail> getOrderDetailSet() {
+	return orderDetailSet;
+}
+public void setOrderDetailSet(Set<OrderDetail> orderDetailSet) {
+	this.orderDetailSet = orderDetailSet;
+}
 @OneToMany(fetch = FetchType.LAZY,mappedBy="order")
 Set<OrderDetail> orderDetailSet;
 public int getId() {
