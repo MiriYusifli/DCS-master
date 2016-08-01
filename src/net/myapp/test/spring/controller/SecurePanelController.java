@@ -10,7 +10,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
-import org.aspectj.weaver.ast.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
@@ -44,8 +43,10 @@ import net.myapp.exception.usercard.UserCardNotFoundException;
 import net.myapp.exception.usercard.UserCardValidDateExpiredException;
 import net.myapp.form.model.CardSearchRequest;
 import net.myapp.form.model.CustomerAddRequest;
+import net.myapp.form.model.OrderAddJSONRequest;
 import net.myapp.form.model.OrderAddRequest;
 import net.myapp.form.model.PayOrdersRequest;
+import net.myapp.form.model.OrderDetailJSON;
 import net.myapp.hbr.dao.CardDAO;
 import net.myapp.hbr.dao.CardDAOImpl;
 import net.myapp.hbr.dao.CardTypeDAO;
@@ -347,21 +348,21 @@ public class SecurePanelController {
 	
 	
 	
-	@ResponseBody
-	@RequestMapping(value="/create_persons", method=RequestMethod.POST)
-	public  void createPerson(@RequestBody OrderAddRequest[] orderAddRequest ){
-	//here you can persons array as normal
-	System.out.println("begin");
-		for (int i = 0; i < orderAddRequest.length; i++) {
-			System.out.println("order is "+orderAddRequest[i].getGood_id());
-		}
-		
-		
+
+/*	@RequestMapping(value={"/create_persons"}, method=RequestMethod.POST)
+	public  void createPerson(@RequestBody Test test){
+	System.out.println(test.getName());	
+	}*/
+	
+	@RequestMapping(value={"/create_persons"}, method=RequestMethod.POST)
+	public  void createPerson(@RequestBody OrderAddJSONRequest orderAddJSONRequest){
+	for (OrderDetailJSON test : orderAddJSONRequest.getOrderList()) {
+		System.out.println(test.getName());
+	}
+
 	}
 	
 	
-	
-	//branch m_11_07
 	@RequestMapping(value = "new_card", method = RequestMethod.GET)
 	public String printHello8(@RequestParam(defaultValue = "null") String user_id) {
 	

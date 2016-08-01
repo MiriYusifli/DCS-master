@@ -2,6 +2,8 @@ package net.myapp.form.model;
 
 public class OrderAddRequest extends MainRequest {
 	int good_id;
+	int gcount;
+	
 	public int getGood_id() {
 		return good_id;
 	}
@@ -19,5 +21,5 @@ public class OrderAddRequest extends MainRequest {
 	public void setGcount(int gcount) {
 		this.gcount = gcount;
 	}
-	int gcount;
+	
 }

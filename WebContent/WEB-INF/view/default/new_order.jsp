@@ -29,7 +29,7 @@
 </head>
 
 <body>
-
+    
     <div id="wrapper">
 
         <!-- Sidebar -->
@@ -55,6 +55,10 @@
       <div class="container">
         <div class="row">
           <div class="col-md-12">
+          
+          
+ 
+ 
 		  <h1 style="position:absolute; left:50%;top:0%;">Yeni sifaris</h1> 
 		  <h3  style="position:absolute; left:10%;top:7000%;">Istifadeci:${Usercard.user.surname}  ${Usercard.user.name}</h3>
           <h3  style="position:absolute; left:10%;top:10000%;">Kard kodu:${Usercard.card.code}</h3>
@@ -109,10 +113,11 @@
               		<input type="hidden" value="${Usercard.id}" name="userCard_id">
               
               	<button type="submit" class="btn btn-default" id="ok" value="<spring:message code="add"/>" name="ok" style="position:absolute; left:75%;top:125%;">Bitir</button>
-              
+              	
+              	
               
             </form>
-            
+              
             <table class="table table-bordered" id="myTable" style="position:absolute;top:35000%;"> 
     <thead>
       <tr>
@@ -138,7 +143,8 @@
  
 </div>
       
-      
+      <button id="ok1">Test</button>
+ 
 	   
 	   
 	   
@@ -152,7 +158,7 @@
 	
 	<div id="payable"></div>
 	
-	
+	       
 <script>
 var orders = [
                 
@@ -235,7 +241,34 @@ $(document).ready(function(){
 
 
 $(document).ready(function(){
-    $("#ok").click(function(){
+
+
+
+
+    $("#ok1").click(function(){
+
+var obj= '{"name":"saat","price":"12","count":"3"}';
+// obj= '{"name":"saat"}';
+obj='{"orderList":[{"name":"saat","price":"12","count":"3"},{"name":"saat1","price":"121","count":"31"}]}';
+//alert(obj+"--------"+JSON.stringify(obj));
+
+	$.ajax({ 
+		type: "POST",
+        url: "create_persons",
+	    dataType: 'json', 
+	    data: obj, 
+	    contentType: 'application/json',
+	    mimeType: 'application/json',
+	    success: function(data) { 
+	        alert(data);
+	        //if (data=="ok")   ___;
+	    },
+		 cache: false,
+		 processData:false
+	});
+  
+  
+/*
 $.ajax({
 	type: 'POST',
 	dataType: 'json',
@@ -254,9 +287,76 @@ $.ajax({
 	//alert('request failed'+errorThrown);
 	}
 	});
+*/ 
+ 	
+  
     });
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 });
 
+
+
+
+/*
+function sendExcelJSON(){
+	
+	
+	var filtrMap="";
+	var widthColumn="";
+	
+	<c:forEach items="${JSONForExcel.filtrMap}" var="val" varStatus="status">
+	   filtrMap=filtrMap+'"${val.key}":"${val.value}",';
+    </c:forEach>
+	
+    
+    <c:forEach items="${JSONForExcel.widthColumn}" var="val" varStatus="status">
+       widthColumn=widthColumn+'"${val.key}":"${val.value}",';
+    </c:forEach>
+	
+	filtrMap=cutLastCharacter(filtrMap);
+	widthColumn=cutLastCharacter(widthColumn);
+	
+
+	 
+	 var obj='{'
+			+'"reportName" :"${JSONForExcel.reportName}",'
+			+'"excelFileName" :"${JSONForExcel.excelFileName}",'
+			+'"columnCount":"${JSONForExcel.columnCount}",'
+			+'"filtrMap":{'+filtrMap+'},'
+		    +'"widthColumn":{'+widthColumn+'}'
+			 +'}';
+	
+			//alert(obj);
+			//alert(window.name);
+	
+	
+		$.ajax({ 
+		type: "POST",
+        url: "${contextURL}/Dispatcher?viewID="+$("#viewID").val()+"&commandName=Reports/SetExcelJSON",
+	    dataType: 'json', 
+	    data: obj, 
+	    contentType: 'application/json',
+	    mimeType: 'application/json',
+	    success: function(data) { 
+	        //alert(data);
+	        if (data=="ok")   submitExcelForm('Reports/XLS');
+	    },
+		cache: false
+	});
+	
+ 
+	
+} 
+*/
 
 
 

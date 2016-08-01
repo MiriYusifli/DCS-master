@@ -4,3 +4,9 @@ but in autowired use interface for normal workflow
 
 -for tag files
 https://nikojava.wordpress.com/2009/01/12/jsp-custom-tags-part1-create-tag-file/
+
+
+- relative with json jar
+jackson-core
+jackson-databind
+jackson-annotations
